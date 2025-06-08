@@ -1,0 +1,2828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EduLearn - Modern E-Learning Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/fullcalendar@6.1.10/main.min.css">
+  <style id="app-style">
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --primary-color: #4f46e5;
+      --secondary-color: #10b981;
+      --accent-color: #f97316;
+      --dark-color: #1e293b;
+      --light-color: #f8fafc;
+      --error-color: #ef4444;
+      --success-color: #22c55e;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light-color);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    /* Animation Classes */
+    .slide-in {
+      animation: slideIn 0.4s ease-out forwards;
+    }
+    
+    .slide-out {
+      animation: slideOut 0.4s ease-in forwards;
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+    
+    .fade-out {
+      animation: fadeOut 0.4s ease-in forwards;
+    }
+    
+    .shake {
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(0); }
+    }
+    
+    @keyframes slideOut {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+    
+    /* Background Animation */
+    .bg-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .bg-animation::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #4f46e5, #10b981, #f97316);
+      opacity: 0.1;
+      animation: gradientAnimation 15s ease infinite;
+    }
+    
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      animation: float 15s infinite;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0); }
+      25% { transform: translateY(-20px) translateX(10px); }
+      50% { transform: translateY(0) translateX(20px); }
+      75% { transform: translateY(20px) translateX(10px); }
+      100% { transform: translateY(0) translateX(0); }
+    }
+    
+    /* Login Form */
+    .login-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 90%;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+    
+    .login-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .login-tab {
+      cursor: pointer;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .login-tab.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .login-form {
+      margin-top: 1.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+    
+    .form-error {
+      color: var(--error-color);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      background-color: #4338ca;
+      transform: translateY(-2px);
+    }
+    
+    /* Dashboard Styles */
+    .dashboard-container {
+      display: none;
+      min-height: 100vh;
+    }
+    
+    .sidebar {
+      width: 250px;
+      background-color: var(--dark-color);
+      color: white;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      transition: all 0.3s ease;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .sidebar-brand {
+      padding: 1.5rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar-menu {
+      padding: 1rem 0;
+      flex-grow: 1;
+    }
+    
+    .sidebar-item {
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .sidebar-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar-item.active {
+      background-color: var(--primary-color);
+    }
+    
+    .sidebar-item i {
+      margin-right: 0.75rem;
+    }
+    
+    .main-content {
+      margin-left: 250px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+    
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .dashboard-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dark-color);
+    }
+    
+    .course-card {
+      background-color: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background-color: #e2e8f0;
+      border-radius: 4px;
+      margin: 0.75rem 0;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background-color: var(--secondary-color);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    
+    /* Calendar Styles */
+    .calendar-container {
+      background-color: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+    }
+    
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal-content {
+      background-color: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+      padding: 2rem;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-overlay.show .modal-content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--dark-color);
+    }
+    
+    .modal-close {
+      background-color: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #94a3b8;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-close:hover {
+      color: var(--error-color);
+    }
+    
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 1000;
+    }
+    
+    .toast {
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 1rem 1.5rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      transform: translateX(100%);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .toast.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    
+    .toast-success {
+      border-left: 4px solid var(--success-color);
+    }
+    
+    .toast-error {
+      border-left: 4px solid var(--error-color);
+    }
+    
+    .toast-icon {
+      margin-right: 0.75rem;
+      font-size: 1.25rem;
+    }
+    
+    .toast-success .toast-icon {
+      color: var(--success-color);
+    }
+    
+    .toast-error .toast-icon {
+      color: var(--error-color);
+    }
+    
+    /* Content Area Styles */
+    .content-area {
+      display: none;
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+    
+    .content-area.active {
+      display: block;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+    .sidebar {
+        width: 250px;
+        transform: translateX(-100%);
+        transition: all 0.3s ease;
+        opacity: 1;
+        z-index: 100;
+        position: fixed;
+        height: 100vh;
+      }
+      
+      .sidebar.show {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+        transition: all 0.3s ease;
+      }
+      
+      .dashboard-header {
+        position: relative;
+      }
+      
+      .sidebar-toggle {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--dark-color);
+        cursor: pointer;
+      }
+    }
+    
+    /* Admin Specific Styles */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e2e8f0;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .toggle-slider {
+      background-color: var(--secondary-color);
+    }
+    
+    input:focus + .toggle-slider {
+      box-shadow: 0 0 1px var(--secondary-color);
+    }
+    
+    input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+    
+    /* Teacher Specific Styles */
+    .dropzone {
+      border: 2px dashed #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .dropzone:hover {
+      border-color: var(--primary-color);
+      background-color: rgba(79, 70, 229, 0.05);
+    }
+    
+    .dropzone.drag-over {
+      border-color: var(--secondary-color);
+      background-color: rgba(16, 185, 129, 0.05);
+    }
+    
+    /* Custom Loader */
+    .loader {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(79, 70, 229, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary-color);
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Ad Slider Styles */
+    .ads-slider {
+      transition: transform 0.5s ease;
+    }
+    
+    .ad-slide {
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+    
+    /* Timetable Animation */
+    .timetable-container {
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.4s ease-out;
+    }
+    
+    .timetable-container.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    /* Add inside the style id="app-style" section */
+    .fa-video-camera {
+      transform: rotate(-10deg);
+      transition: transform 0.3s ease;
+    }
+    
+    #courseLiveLessons a:hover .fa-video-camera,
+    #courseLiveLessons li:hover .fa-video-camera {
+      transform: rotate(0deg) scale(1.1);
+      color: var(--accent-color);
+    }
+    
+    #courseLiveLessons {
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    /* Adjust ads section for large screens */
+    @media (min-width: 1200px) {
+      #adsSection .container {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+    }
+    
+    /* Add styles for the video player and notes section */
+    .video-player-container {
+      margin-bottom: 1.5rem;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      background-color: #f1f5f9;
+    }
+    
+    .video-player {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: none;
+    }
+    
+    .video-notes-container {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .video-notes-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      resize: vertical;
+    }
+</style>
+</head>
+<body>
+  <!-- Background Animation -->
+  <div class="bg-animation" id="bgAnimation"></div>
+  
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+  
+  <!-- Login/Registration Screen -->
+  <div class="h-screen w-full flex justify-center items-center" id="loginScreen">
+    <div class="login-container">
+      <div class="flex justify-center space-x-4 mb-6">
+        <div class="login-tab active" data-role="student">Student</div>
+        <div class="login-tab" data-role="teacher">Teacher</div>
+        <div class="login-tab" data-role="admin">Admin</div>
+      </div>
+      
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <input type="text" class="form-input" placeholder="Name" id="nameInput" required>
+          <div class="form-error" id="nameError"></div>
+        </div>
+        
+        <div class="form-group">
+          <input type="tel" class="form-input" placeholder="Phone Number" id="phoneInput" required>
+          <div class="form-error" id="phoneError"></div>
+        </div>
+        
+        <div class="form-group">
+          <input type="email" class="form-input" placeholder="Email" id="emailInput" required>
+          <div class="form-error" id="emailError"></div>
+        </div>
+        
+        <div class="form-group">
+          <input type="text" class="form-input" placeholder="Username" id="usernameInput" required>
+          <div class="form-error" id="usernameError"></div>
+        </div>
+        
+        <div class="form-group">
+          <input type="password" class="form-input" placeholder="Password" id="passwordInput" required>
+          <div class="form-error" id="passwordError"></div>
+        </div>
+        
+     
+        <div class="flex justify-between items-center">
+          <div class="text-sm">
+            <a href="javascript:void(0)" class="text-primary-color" id="toggleLoginRegister">Already have an account? Login</a>
+          </div>
+          <button type="submit" class="btn btn-primary" id="submitBtn">Register</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Student Dashboard -->
+  <div class="dashboard-container" id="studentDashboard">
+    <div class="sidebar" id="studentSidebar">
+      <div class="sidebar-brand">
+        <i class="fas fa-graduation-cap mr-2"></i> EduLearn
+      </div>
+      <div class="sidebar-menu">
+        <div class="sidebar-item active" data-content="myCourses">
+          <i class="fas fa-book"></i> My Courses
+        </div>
+        <div class="sidebar-item" data-content="schedule">
+          <i class="fas fa-calendar-alt"></i> Schedule
+        </div>
+        <div class="sidebar-item" data-content="profile">
+          <i class="fas fa-user"></i> Profile
+        </div>
+        <div class="sidebar-item" id="studentLogout">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </div>
+      </div>
+      
+      <!-- Add footer note -->
+      <div class="mt-auto p-4 text-center text-xs text-gray-400 italic">
+        Powered by EduMagic Platform
+      </div>
+    </div>
+    
+    <div class="main-content">
+      <!-- My Courses -->
+      <div class="content-area active" id="myCourses">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">My Courses</h1>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="course-card">
+            <h3 class="text-xl font-semibold">Introduction to Programming</h3>
+            <p class="text-gray-600 mt-2">Learn the basics of programming with Python</p>
+            <div class="progress-bar mt-4">
+              <div class="progress-fill" style="width: 75%;"></div>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">75% Complete</span>
+              <button class="btn btn-primary mt-4">Enter</button>
+            </div>
+          </div>
+          
+          <div class="course-card">
+            <h3 class="text-xl font-semibold">Web Development Fundamentals</h3>
+            <p class="text-gray-600 mt-2">Learn HTML, CSS, and JavaScript</p>
+            <div class="progress-bar mt-4">
+              <div class="progress-fill" style="width: 45%;"></div>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">45% Complete</span>
+              <button class="btn btn-primary mt-4">Enter</button>
+            </div>
+          </div>
+          
+          <div class="course-card">
+            <h3 class="text-xl font-semibold">Data Science Essentials</h3>
+            <p class="text-gray-600 mt-2">Introduction to data analysis and visualization</p>
+            <div class="progress-bar mt-4">
+              <div class="progress-fill" style="width: 20%;"></div>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-500">20% Complete</span>
+              <button class="btn btn-primary mt-4">Enter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Schedule -->
+      <div class="content-area" id="schedule">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">My Schedule</h1>
+        </div>
+        
+        <div class="calendar-container">
+          <div id="studentCalendar"></div>
+        </div>
+      </div>
+      
+      <!-- Profile -->
+      <div class="content-area" id="profile">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">My Profile</h1>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <form id="studentProfileForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Full Name</label>
+                <input type="text" class="form-input" id="studentName" value="John Doe">
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Email</label>
+                <input type="email" class="form-input" id="studentEmail" value="john.doe@example.com">
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Phone Number</label>
+                <input type="tel" class="form-input" id="studentPhone" value="(123) 456-7890">
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Date of Birth</label>
+                <input type="date" class="form-input" id="studentDob" value="1995-05-15">
+              </div>
+              
+              <div class="form-group md:col-span-2">
+                <label class="block text-gray-700 mb-2">Bio</label>
+                <textarea class="form-input h-32" id="studentBio">I am a passionate student interested in programming and web development.</textarea>
+              </div>
+            </div>
+            
+            <div class="flex justify-end mt-6">
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </form>
+          
+          <!-- Add login credentials section -->
+          <div class="mt-8 pt-6 border-t border-gray-200">
+            <h3 class="text-lg font-medium text-gray-700 mb-4">Login Credentials</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm text-gray-500">Username</p>
+                <p class="font-medium" id="studentLoginUsername">STUDENT</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Password</p>
+                <p class="font-medium" id="studentLoginPassword">ALTECHSTUDENT</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Course Content -->
+      <div class="content-area" id="courseContent">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">Course Content</h1>
+          <button class="btn bg-gray-300 text-gray-700" id="backToCourses">
+            <i class="fas fa-arrow-left mr-2"></i> Back to Courses
+          </button>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <h2 class="text-2xl font-semibold mb-4" id="courseTitleHeader">Introduction to Programming</h2>
+          
+          <div class="mb-6">
+            <h3 class="text-lg font-medium mb-2">Course Description</h3>
+            <p id="courseDescriptionText">Learn the basics of programming with Python, including variables, data types, and control structures.</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="text-lg font-medium mb-2">Learning Materials</h3>
+              <ul class="space-y-2" id="courseMaterials">
+                <li class="flex items-center">
+                  <i class="fas fa-file-pdf text-red-500 mr-2"></i>
+                  <a href="#" class="text-blue-600 hover:underline">Introduction to Python.pdf</a>
+                </li>
+                <li class="flex items-center">
+                  <i class="fas fa-video text-blue-500 mr-2"></i>
+                  <a href="#" class="text-blue-600 hover:underline">Variables and Data Types.mp4</a>
+                </li>
+                <li class="flex items-center">
+                  <i class="fas fa-file-code text-green-500 mr-2"></i>
+                  <a href="#" class="text-blue-600 hover:underline">Practice Examples.zip</a>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="text-lg font-medium mb-2">Assignments</h3>
+              <ul class="space-y-2" id="courseAssignments">
+                <li class="flex justify-between items-center">
+                  <div class="flex items-center">
+                    <i class="fas fa-tasks text-purple-500 mr-2"></i>
+                    <span>Assignment 1: Basic Syntax</span>
+                  </div>
+                  <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">Completed</span>
+                </li>
+                <li class="flex justify-between items-center">
+                  <div class="flex items-center">
+                    <i class="fas fa-tasks text-purple-500 mr-2"></i>
+                    <span>Assignment 2: Functions</span>
+                  </div>
+                  <span class="text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded">In Progress</span>
+                </li>
+                <li class="flex justify-between items-center">
+                  <div class="flex items-center">
+                    <i class="fas fa-tasks text-purple-500 mr-2"></i>
+                    <span>Assignment 3: Loops</span>
+                  </div>
+                  <span class="text-sm bg-gray-100 text-gray-800 px-2 py-1 rounded">Not Started</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="bg-gray-50 p-4 rounded-lg md:col-span-2">
+              <h3 class="text-lg font-medium mb-2">Live Lessons</h3>
+              <ul class="space-y-2" id="courseLiveLessons">
+                <li class="flex items-center">
+                  <i class="fas fa-video-camera text-purple-500 mr-2"></i>
+                  <a href="#" class="text-blue-600 hover:underline">Monday - Introduction to Variables (10:00 AM)</a>
+                </li>
+                <li class="flex items-center">
+                  <i class="fas fa-video-camera text-purple-500 mr-2"></i>
+                  <a href="#" class="text-blue-600 hover:underline">Wednesday - Control Structures (2:00 PM)</a>
+                </li>
+                <li class="flex items-center">
+                  <i class="fas fa-video-camera text-purple-500 mr-2"></i>
+                  <a href="#" class="text-blue-600 hover:underline">Friday - Functions & Methods (11:00 AM)</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Add video section -->
+          <div class="bg-gray-50 p-4 rounded-lg md:col-span-2 mt-4">
+            <h3 class="text-lg font-medium mb-2">Video Presentation</h3>
+            <div class="video-player-container" id="courseVideoContainer">
+              <iframe class="video-player" id="courseVideoPlayer" 
+                      src="" 
+                      allowfullscreen></iframe>
+            </div>
+            <div class="video-notes-container">
+              <h4 class="text-md font-medium mb-2">Your Notes</h4>
+              <textarea class="video-notes-textarea" id="videoNotes" 
+                        placeholder="Add your notes about this video here..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Timetable -->
+      <div class="timetable-container mt-6 bg-white p-6 rounded-lg shadow-sm hidden" id="timetableDetails">
+        <h3 class="text-xl font-semibold mb-4">Weekly Timetable</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white border-collapse">
+            <thead>
+              <tr class="bg-gray-50">
+                <th class="py-3 px-4 border border-gray-200">Time</th>
+                <th class="py-3 px-4 border border-gray-200">Monday</th>
+                <th class="py-3 px-4 border border-gray-200">Tuesday</th>
+                <th class="py-3 px-4 border border-gray-200">Wednesday</th>
+                <th class="py-3 px-4 border border-gray-200">Thursday</th>
+                <th class="py-3 px-4 border border-gray-200">Friday</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="py-3 px-4 border border-gray-200 font-medium">9:00 - 10:30</td>
+                <td class="py-3 px-4 border border-gray-200 bg-blue-50">Programming Basics</td>
+                <td class="py-3 px-4 border border-gray-200"></td>
+                <td class="py-3 px-4 border border-gray-200 bg-blue-50">Programming Basics</td>
+                <td class="py-3 px-4 border border-gray-200"></td>
+                <td class="py-3 px-4 border border-gray-200"></td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 border border-gray-200 font-medium">11:00 - 12:30</td>
+                <td class="py-3 px-4 border border-gray-200"></td>
+                <td class="py-3 px-4 border border-gray-200 bg-green-50">Web Development</td>
+                <td class="py-3 px-4 border border-gray-200"></td>
+                <td class="py-3 px-4 border border-gray-200 bg-green-50">Web Development</td>
+                <td class="py-3 px-4 border border-gray-200"></td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 border border-gray-200 font-medium">14:00 - 15:30</td>
+                <td class="py-3 px-4 border border-gray-200"></td>
+                <td class="py-3 px-4 border border-gray-200"></td>
+                <td class="py-3 px-4 border border-gray-200 bg-orange-50">Data Science</td>
+                <td class="py-3 px-4 border border-gray-200"></td>
+                <td class="py-3 px-4 border border-gray-200 bg-orange-50">Data Science</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Ads Section -->
+      <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 p-2" id="adsSection">
+        <div class="container mx-auto">
+          <div class="relative h-20 overflow-hidden">
+            <div class="ads-slider flex transition-transform duration-500">
+              <div class="ad-slide min-w-full p-2 flex items-center justify-between">
+                <div class="flex items-center">
+                  <img src="https://via.placeholder.com/80x60?text=Ad+1" alt="Advertisement" class="rounded mr-4">
+                  <div>
+                    <h4 class="font-medium">Special Discount on Premium Courses!</h4>
+                    <p class="text-sm text-gray-600">Get 30% off on all premium courses until June 30th.</p>
+                  </div>
+                </div>
+                <a href="#" class="btn btn-primary">Learn More</a>
+              </div>
+              <div class="ad-slide min-w-full p-2 flex items-center justify-between">
+                <div class="flex items-center">
+                  <img src="https://via.placeholder.com/80x60?text=Ad+2" alt="Advertisement" class="rounded mr-4">
+                  <div>
+                    <h4 class="font-medium">New Data Science Masterclass</h4>
+                    <p class="text-sm text-gray-600">Join our advanced Data Science course starting next month.</p>
+                  </div>
+                </div>
+                <a href="#" class="btn btn-primary">Enroll Now</a>
+              </div>
+              <div class="ad-slide min-w-full p-2 flex items-center justify-between">
+                <div class="flex items-center">
+                  <img src="https://via.placeholder.com/80x60?text=Ad+3" alt="Advertisement" class="rounded mr-4">
+                  <div>
+                    <h4 class="font-medium">Join Our Tech Conference</h4>
+                    <p class="text-sm text-gray-600">Network with industry professionals and expand your knowledge.</p>
+                  </div>
+                </div>
+                <a href="#" class="btn btn-primary">Register</a>
+              </div>
+            </div>
+            <button class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md" id="prevAd">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md" id="nextAd">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Teacher Dashboard -->
+  <div class="dashboard-container" id="teacherDashboard">
+    <div class="sidebar" id="teacherSidebar">
+      <div class="sidebar-brand">
+        <i class="fas fa-chalkboard-teacher mr-2"></i> EduLearn
+      </div>
+      <div class="sidebar-menu">
+        <div class="sidebar-item active" data-content="manageCourses">
+          <i class="fas fa-book"></i> Manage Courses
+        </div>
+        <div class="sidebar-item" data-content="scheduleClasses">
+          <i class="fas fa-calendar-alt"></i> Schedule Classes
+        </div>
+        <div class="sidebar-item" data-content="uploadContent">
+          <i class="fas fa-upload"></i> Upload Content
+        </div>
+        <div class="sidebar-item" data-content="teacherProfile">
+          <i class="fas fa-user"></i> Profile
+        </div>
+        <div class="sidebar-item" id="teacherLogout">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </div>
+      </div>
+      
+      <!-- Add footer note -->
+      <div class="mt-auto p-4 text-center text-xs text-gray-400 italic">
+        Powered by EduMagic Platform
+      </div>
+    </div>
+    
+    <div class="main-content">
+      <!-- Manage Courses -->
+      <div class="content-area active" id="manageCourses">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">Manage Courses</h1>
+          <button class="btn btn-primary" id="createCourseBtn">
+            <i class="fas fa-plus mr-2"></i> Create New Course
+          </button>
+        </div>
+        
+        <div class="grid grid-cols-1 gap-4">
+          <div class="course-card">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="text-xl font-semibold">Introduction to Programming</h3>
+                <p class="text-gray-600 mt-2">Learn the basics of programming with Python</p>
+                <div class="mt-2 flex items-center">
+                  <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">20 Students</span>
+                  <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded ml-2">Active</span>
+                </div>
+              </div>
+              <div class="flex space-x-2">
+                <button class="btn bg-blue-500 text-white px-3 py-2 rounded-md">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn bg-red-500 text-white px-3 py-2 rounded-md">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="course-card">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="text-xl font-semibold">Web Development Fundamentals</h3>
+                <p class="text-gray-600 mt-2">Learn HTML, CSS, and JavaScript</p>
+                <div class="mt-2 flex items-center">
+                  <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">15 Students</span>
+                  <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded ml-2">Active</span>
+                </div>
+              </div>
+              <div class="flex space-x-2">
+                <button class="btn bg-blue-500 text-white px-3 py-2 rounded-md">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn bg-red-500 text-white px-3 py-2 rounded-md">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Schedule Classes -->
+      <div class="content-area" id="scheduleClasses">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">Schedule Classes</h1>
+        </div>
+        
+        <div class="calendar-container">
+          <div id="teacherCalendar"></div>
+        </div>
+      </div>
+      
+      <!-- Upload Content -->
+      <div class="content-area" id="uploadContent">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">Upload Content</h1>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <div class="mb-6">
+            <label class="block text-gray-700 mb-2">Select Course</label>
+            <select class="form-input" id="contentCourseSelect">
+              <option value="">Select a course</option>
+              <option value="1">Introduction to Programming</option>
+              <option value="2">Web Development Fundamentals</option>
+              <option value="3">Data Science Essentials</option>
+            </select>
+          </div>
+          
+          <div class="mb-6">
+            <label class="block text-gray-700 mb-2">Content Type</label>
+            <div class="flex space-x-4">
+              <label class="inline-flex items-center">
+                <input type="radio" name="contentType" value="notes" class="form-radio" checked>
+                <span class="ml-2">Notes (PDF)</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="radio" name="contentType" value="video" class="form-radio">
+                <span class="ml-2">Video</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="radio" name="contentType" value="exam" class="form-radio">
+                <span class="ml-2">Exam (PDF/ZIP)</span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="dropzone" id="contentDropzone">
+            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+            <p>Drag & drop your files here, or click to browse</p>
+            <p class="text-sm text-gray-500 mt-2">Supported formats: PDF, MP4, ZIP (max 50MB)</p>
+          </div>
+          
+          <div class="mt-6 hidden" id="uploadProgress">
+            <div class="flex items-center justify-between mb-2">
+              <span id="uploadFileName">file.pdf</span>
+              <span id="uploadPercent">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="uploadProgressBar" style="width: 0%;"></div>
+            </div>
+          </div>
+          
+          <div class="flex justify-end mt-6">
+            <button type="button" class="btn btn-primary" id="uploadContentBtn">Upload Content</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Teacher Profile -->
+      <div class="content-area" id="teacherProfile">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">My Profile</h1>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <form id="teacherProfileForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Full Name</label>
+                <input type="text" class="form-input" id="teacherName" value="Jane Smith">
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Email</label>
+                <input type="email" class="form-input" id="teacherEmail" value="jane.smith@example.com">
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Phone Number</label>
+                <input type="tel" class="form-input" id="teacherPhone" value="(123) 456-7890">
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Expertise</label>
+                <input type="text" class="form-input" id="teacherExpertise" value="Programming, Web Development">
+              </div>
+              
+              <div class="form-group md:col-span-2">
+                <label class="block text-gray-700 mb-2">Bio</label>
+                <textarea class="form-input h-32" id="teacherBio">I am a passionate educator with over 5 years of experience teaching programming and web development.</textarea>
+              </div>
+            </div>
+            
+            <div class="flex justify-end mt-6">
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </form>
+          
+          <!-- Add login credentials section -->
+          <div class="mt-8 pt-6 border-t border-gray-200">
+            <h3 class="text-lg font-medium text-gray-700 mb-4">Login Credentials</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm text-gray-500">Username</p>
+                <p class="font-medium" id="teacherLoginUsername">TEACHER</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Password</p>
+                <p class="font-medium" id="teacherLoginPassword">ALTECHTEACHER</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Admin Dashboard -->
+  <div class="dashboard-container" id="adminDashboard">
+    <div class="sidebar" id="adminSidebar">
+      <div class="sidebar-brand">
+        <i class="fas fa-user-shield mr-2"></i> EduLearn
+      </div>
+      <div class="sidebar-menu">
+        <div class="sidebar-item active" data-content="userManagement">
+          <i class="fas fa-users"></i> User Management
+        </div>
+        <div class="sidebar-item" data-content="siteSettings">
+          <i class="fas fa-cog"></i> Site Settings
+        </div>
+        <div class="sidebar-item" data-content="postAds">
+          <i class="fas fa-ad"></i> Post Ads
+        </div>
+        <div class="sidebar-item" id="adminLogout">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </div>
+      </div>
+      
+      <!-- Add footer note -->
+      <div class="mt-auto p-4 text-center text-xs text-gray-400 italic">
+        Powered by EduMagic Platform
+      </div>
+    </div>
+    
+    <div class="main-content">
+      <!-- User Management -->
+      <div class="content-area active" id="userManagement">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">User Management</h1>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <div class="flex border-b mb-4">
+            <button class="px-4 py-2 border-b-2 border-primary-color text-primary-color" id="studentsTab">Students</button>
+            <button class="px-4 py-2" id="teachersTab">Teachers</button>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="min-w-full bg-white">
+              <thead>
+                <tr>
+                  <th class="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                  <th class="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                  <th class="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th class="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Courses</th>
+                  <th class="py-3 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="userTable">
+                <tr>
+                  <td class="py-4 px-4 border-b border-gray-200">John Doe</td>
+                  <td class="py-4 px-4 border-b border-gray-200">john.doe@example.com</td>
+                  <td class="py-4 px-4 border-b border-gray-200">
+                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Active</span>
+                  </td>
+                  <td class="py-4 px-4 border-b border-gray-200">3</td>
+                  <td class="py-4 px-4 border-b border-gray-200">
+                    <button class="text-blue-500 hover:text-blue-700 mr-2">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="text-red-500 hover:text-red-700">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-4 px-4 border-b border-gray-200">Jane Smith</td>
+                  <td class="py-4 px-4 border-b border-gray-200">jane.smith@example.com</td>
+                  <td class="py-4 px-4 border-b border-gray-200">
+                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Active</span>
+                  </td>
+                  <td class="py-4 px-4 border-b border-gray-200">2</td>
+                  <td class="py-4 px-4 border-b border-gray-200">
+                    <button class="text-blue-500 hover:text-blue-700 mr-2">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="text-red-500 hover:text-red-700">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Site Settings -->
+      <div class="content-area" id="siteSettings">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">Site Settings</h1>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <form id="siteSettingsForm">
+            <div class="grid grid-cols-1 gap-6">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-medium">Maintenance Mode</h3>
+                  <p class="text-gray-500 text-sm">Enable to put the site into maintenance mode</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="maintenanceMode">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-medium">User Registration</h3>
+                  <p class="text-gray-500 text-sm">Allow new users to register</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="userRegistration" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-medium">Email Notifications</h3>
+                  <p class="text-gray-500 text-sm">Send email notifications to users</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="emailNotifications" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              
+              <div>
+                <h3 class="text-lg font-medium mb-2">File Upload Limit</h3>
+                <input type="range" min="1" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="uploadLimit">
+                <div class="flex justify-between">
+                  <span class="text-xs text-gray-500">1MB</span>
+                  <span class="text-xs text-gray-500" id="uploadLimitValue">50MB</span>
+                  <span class="text-xs text-gray-500">100MB</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex justify-end mt-6">
+              <button type="submit" class="btn btn-primary">Save Settings</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Post Ads -->
+      <div class="content-area" id="postAds">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">Post Advertisements</h1>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <form id="adForm">
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Ad Title</label>
+                <input type="text" class="form-input" id="adTitle" placeholder="Enter ad title" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Ad Type</label>
+                <select class="form-input" id="adType" required>
+                  <option value="">Select ad type</option>
+                  <option value="image">Image</option>
+                  <option value="video">Video</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Upload File</label>
+                <input type="file" class="form-input" id="adFile" accept="image/*,video/*" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Target URL</label>
+                <input type="url" class="form-input" id="adUrl" placeholder="https://example.com" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-gray-700 mb-2">Display Period</label>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-xs text-gray-500">Start Date</label>
+                    <input type="date" class="form-input" id="adStartDate" required>
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-500">End Date</label>
+                    <input type="date" class="form-input" id="adEndDate" required>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex justify-end mt-6">
+                <button type="submit" class="btn btn-primary">Post Advertisement</button>
+              </div>
+            </form>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <h3 class="text-lg font-medium mb-4">Ad Preview</h3>
+            <div class="border border-gray-200 rounded-lg p-4 h-80 flex items-center justify-center" id="adPreview">
+              <p class="text-gray-500">Your ad preview will appear here</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Create Course Modal -->
+  <div class="modal-overlay" id="createCourseModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Create New Course</h2>
+        <button class="modal-close" id="closeCourseModal">&times;</button>
+      </div>
+      <form id="createCourseForm">
+        <div class="form-group">
+          <label class="block text-gray-700 mb-2">Course Title</label>
+          <input type="text" class="form-input" id="courseTitle" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="block text-gray-700 mb-2">Description</label>
+          <textarea class="form-input h-32" id="courseDescription" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="block text-gray-700 mb-2">Category</label>
+          <select class="form-input" id="courseCategory" required>
+            <option value="">Select a category</option>
+            <option value="programming">Programming</option>
+            <option value="webdev">Web Development</option>
+            <option value="datascience">Data Science</option>
+            <option value="design">Design</option>
+            <option value="business">Business</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="block text-gray-700 mb-2">Duration (weeks)</label>
+          <input type="number" class="form-input" id="courseDuration" min="1" max="52" required>
+        </div>
+        
+        <div class="flex justify-end mt-6">
+          <button type="button" class="btn bg-gray-300 text-gray-700 mr-2" id="cancelCourseBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Course</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Class Schedule Modal -->
+  <div class="modal-overlay" id="scheduleClassModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Schedule Class</h2>
+        <button class="modal-close" id="closeScheduleModal">&times;</button>
+      </div>
+      <form id="scheduleClassForm">
+        <div class="form-group">
+          <label class="block text-gray-700 mb-2">Class Title</label>
+          <input type="text" class="form-input" id="classTitle" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="block text-gray-700 mb-2">Course</label>
+          <select class="form-input" id="classCourse" required>
+            <option value="">Select a course</option>
+            <option value="1">Introduction to Programming</option>
+            <option value="2">Web Development Fundamentals</option>
+            <option value="3">Data Science Essentials</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="block text-gray-700 mb-2">Date & Time</label>
+          <div class="grid grid-cols-2 gap-4">
+            <input type="date" class="form-input" id="classDate" required>
+            <input type="time" class="form-input" id="classTime" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="block text-gray-700 mb-2">Duration (minutes)</label>
+          <input type="number" class="form-input" id="classDuration" min="30" max="180" step="15" value="60" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="block text-gray-700 mb-2">Description</label>
+          <textarea class="form-input h-32" id="classDescription"></textarea>
+        </div>
+        
+        <div class="flex justify-end mt-6">
+          <button type="button" class="btn bg-gray-300 text-gray-700 mr-2" id="cancelScheduleBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Schedule Class</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Event Details Modal -->
+  <div class="modal-overlay" id="eventDetailsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="eventTitle">Class Title</h2>
+        <button class="modal-close" id="closeEventModal">&times;</button>
+      </div>
+      <div class="p-4">
+        <div class="mb-4">
+          <h3 class="text-gray-700 font-medium">Date & Time</h3>
+          <p id="eventDateTime">May 15, 2025 - 2:00 PM to 3:00 PM</p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-gray-700 font-medium">Course</h3>
+          <p id="eventCourse">Introduction to Programming</p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-gray-700 font-medium">Description</h3>
+          <p id="eventDescription">In this class, we will cover the basics of programming including variables, data types, and control structures.</p>
+        </div>
+        
+        <div class="flex justify-end mt-6">
+          <button type="button" class="btn bg-gray-300 text-gray-700" id="closeEventDetailsBtn">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+  <script id="app-script">
+    // Initialize the background animation
+    document.addEventListener('DOMContentLoaded', function() {
+      createBackgroundParticles();
+      initializeLoginTabs();
+      initializeFormValidation();
+      initializeCalendars();
+      initializeDashboardTabs();
+      initializeModals();
+      initializeToasts();
+      initializeFileUpload();
+      initializeAdPreview();
+      initializeRangeSliders();
+      initializeCourseEnterButtons();
+      initializeTimetableView();
+      initializeAdSlider();
+    });
+    
+    // Create background particles
+    function createBackgroundParticles() {
+      const bgAnimation = document.getElementById('bgAnimation');
+      const numParticles = 20;
+      
+      for (let i = 0; i < numParticles; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random size
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.left = `${Math.random() * 100}%`;
+        
+        // Random animation delay
+        particle.style.animationDelay = `${Math.random() * 15}s`;
+        
+        bgAnimation.appendChild(particle);
+      }
+    }
+    
+    // Initialize login tabs
+    function initializeLoginTabs() {
+      const loginTabs = document.querySelectorAll('.login-tab');
+      const isLogin = document.getElementById('toggleLoginRegister');
+      let currentRole = 'student';
+      
+      loginTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Remove active class from all tabs
+          loginTabs.forEach(t => t.classList.remove('active'));
+          
+          // Add active class to clicked tab
+          tab.classList.add('active');
+          
+          // Store selected role
+          currentRole = tab.getAttribute('data-role');
+        });
+      });
+      
+      isLogin.addEventListener('click', function(e) {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submitBtn');
+        
+        if (this.textContent.includes('Login')) {
+          this.textContent = 'Don\'t have an account? Register';
+          submitBtn.textContent = 'Login';
+          document.querySelector('.login-form').classList.add('login-mode');
+        } else {
+          this.textContent = 'Already have an account? Login';
+          submitBtn.textContent = 'Register';
+          document.querySelector('.login-form').classList.remove('login-mode');
+        }
+      });
+      
+      // Handle form submission
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // For student role, check hardcoded credentials
+        if (currentRole === 'student') {
+          const username = document.getElementById('usernameInput').value;
+          const password = document.getElementById('passwordInput').value;
+          
+          // HARDCODED CREDENTIALS: username="STUDENT", password="ALTECHSTUDENT"
+          if (username === 'STUDENT' && password === 'ALTECHSTUDENT') {
+            // Store form input values for profile
+            const name = document.getElementById('nameInput').value || 'Student User';
+            const email = document.getElementById('emailInput').value || 'student@example.com';
+            const phone = document.getElementById('phoneInput').value || '(000) 000-0000';
+            
+            // Update profile fields with the user's input values
+            document.getElementById('studentName').value = name;
+            document.getElementById('studentEmail').value = email;
+            document.getElementById('studentPhone').value = phone;
+            
+            // Hide login screen
+            document.getElementById('loginScreen').style.display = 'none';
+            // Show student dashboard
+            document.getElementById('studentDashboard').style.display = 'block';
+            // Show success toast
+            showToast('Login successful!', 'success');
+          } else {
+            showToast('Invalid credentials. Use STUDENT/ALTECHSTUDENT', 'error');
+          }
+          return;
+        }
+        
+        // For teacher and admin roles
+        // Validate form
+        if (!validateForm()) {
+          return;
+        }
+        
+        // Show loader
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.textContent;
+        submitBtn.innerHTML = '<div class="loader"></div>';
+        submitBtn.disabled = true;
+        
+        // Simple static login without simulation
+        setTimeout(() => {
+          // Hide login screen
+          document.getElementById('loginScreen').style.display = 'none';
+          
+          // Show appropriate dashboard
+          if (currentRole === 'teacher') {
+            document.getElementById('teacherDashboard').style.display = 'block';
+          } else if (currentRole === 'admin') {
+            document.getElementById('adminDashboard').style.display = 'block';
+          }
+          
+          // Reset button
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+          
+          // Show success toast
+          showToast('Login successful!', 'success');
+        }, 1000);
+      });
+      
+      // Handle logout buttons
+      document.getElementById('studentLogout').addEventListener('click', logoutUser);
+      document.getElementById('teacherLogout').addEventListener('click', logoutUser);
+      document.getElementById('adminLogout').addEventListener('click', logoutUser);
+    }
+    
+    // Initialize form validation
+    function initializeFormValidation() {
+      const form = document.getElementById('loginForm');
+      const nameInput = document.getElementById('nameInput');
+      const phoneInput = document.getElementById('phoneInput');
+      const emailInput = document.getElementById('emailInput');
+      const usernameInput = document.getElementById('usernameInput');
+      const passwordInput = document.getElementById('passwordInput');
+      const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+      
+      const nameError = document.getElementById('nameError');
+      const phoneError = document.getElementById('phoneError');
+      const emailError = document.getElementById('emailError');
+      const usernameError = document.getElementById('usernameError');
+      const passwordError = document.getElementById('passwordError');
+      const confirmPasswordError = document.getElementById('confirmPasswordError');
+      
+      nameInput.addEventListener('blur', () => {
+        if (nameInput.value.trim() === '') {
+          nameError.textContent = 'Name is required';
+          nameInput.classList.add('border-red-500');
+        } else {
+          nameError.textContent = '';
+          nameInput.classList.remove('border-red-500');
+        }
+      });
+      
+      phoneInput.addEventListener('blur', () => {
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phoneInput.value.replace(/\D/g, ''))) {
+          phoneError.textContent = 'Please enter a valid 10-digit phone number';
+          phoneInput.classList.add('border-red-500');
+        } else {
+          phoneError.textContent = '';
+          phoneInput.classList.remove('border-red-500');
+        }
+      });
+      
+      emailInput.addEventListener('blur', () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailInput.value)) {
+          emailError.textContent = 'Please enter a valid email address';
+          emailInput.classList.add('border-red-500');
+        } else {
+          emailError.textContent = '';
+          emailInput.classList.remove('border-red-500');
+        }
+      });
+      
+      usernameInput.addEventListener('blur', () => {
+        if (usernameInput.value.length < 4) {
+          usernameError.textContent = 'Username must be at least 4 characters';
+          usernameInput.classList.add('border-red-500');
+        } else {
+          usernameError.textContent = '';
+          usernameInput.classList.remove('border-red-500');
+        }
+      });
+      
+      passwordInput.addEventListener('blur', () => {
+        if (passwordInput.value.length < 6) {
+          passwordError.textContent = 'Password must be at least 6 characters';
+          passwordInput.classList.add('border-red-500');
+        } else {
+          passwordError.textContent = '';
+          passwordInput.classList.remove('border-red-500');
+        }
+      });
+      
+      confirmPasswordInput.addEventListener('blur', () => {
+        if (confirmPasswordInput.value !== passwordInput.value) {
+          confirmPasswordError.textContent = 'Passwords do not match';
+          confirmPasswordInput.classList.add('border-red-500');
+        } else {
+          confirmPasswordError.textContent = '';
+          confirmPasswordInput.classList.remove('border-red-500');
+        }
+      });
+    }
+    
+    // Validate form
+    function validateForm() {
+      let isValid = true;
+      const nameInput = document.getElementById('nameInput');
+      const phoneInput = document.getElementById('phoneInput');
+      const emailInput = document.getElementById('emailInput');
+      const usernameInput = document.getElementById('usernameInput');
+      const passwordInput = document.getElementById('passwordInput');
+      const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+      
+      const nameError = document.getElementById('nameError');
+      const phoneError = document.getElementById('phoneError');
+      const emailError = document.getElementById('emailError');
+      const usernameError = document.getElementById('usernameError');
+      const passwordError = document.getElementById('passwordError');
+      const confirmPasswordError = document.getElementById('confirmPasswordError');
+      
+      // Check if login mode
+      const isLoginMode = document.querySelector('.login-form').classList.contains('login-mode');
+      
+      if (!isLoginMode) {
+        // Validate name
+        if (nameInput.value.trim() === '') {
+          nameError.textContent = 'Name is required';
+          nameInput.classList.add('border-red-500');
+          nameInput.parentElement.classList.add('shake');
+          isValid = false;
+          
+          // Remove shake animation after it completes
+          setTimeout(() => {
+            nameInput.parentElement.classList.remove('shake');
+          }, 500);
+        } else {
+          nameError.textContent = '';
+          nameInput.classList.remove('border-red-500');
+        }
+        
+        // Validate phone
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phoneInput.value.replace(/\D/g, ''))) {
+          phoneError.textContent = 'Please enter a valid 10-digit phone number';
+          phoneInput.classList.add('border-red-500');
+          phoneInput.parentElement.classList.add('shake');
+          isValid = false;
+          
+          setTimeout(() => {
+            phoneInput.parentElement.classList.remove('shake');
+          }, 500);
+        } else {
+          phoneError.textContent = '';
+          phoneInput.classList.remove('border-red-500');
+        }
+      }
+      
+      // Validate email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailInput.value)) {
+        emailError.textContent = 'Please enter a valid email address';
+        emailInput.classList.add('border-red-500');
+        emailInput.parentElement.classList.add('shake');
+        isValid = false;
+        
+        setTimeout(() => {
+          emailInput.parentElement.classList.remove('shake');
+        }, 500);
+      } else {
+        emailError.textContent = '';
+        emailInput.classList.remove('border-red-500');
+      }
+      
+      // Validate username
+      if (usernameInput.value.length < 4) {
+        usernameError.textContent = 'Username must be at least 4 characters';
+        usernameInput.classList.add('border-red-500');
+        usernameInput.parentElement.classList.add('shake');
+        isValid = false;
+        
+        setTimeout(() => {
+          usernameInput.parentElement.classList.remove('shake');
+        }, 500);
+      } else {
+        usernameError.textContent = '';
+        usernameInput.classList.remove('border-red-500');
+      }
+      
+      // Validate password
+      if (passwordInput.value.length < 6) {
+        passwordError.textContent = 'Password must be at least 6 characters';
+        passwordInput.classList.add('border-red-500');
+        passwordInput.parentElement.classList.add('shake');
+        isValid = false;
+        
+        setTimeout(() => {
+          passwordInput.parentElement.classList.remove('shake');
+        }, 500);
+      } else {
+        passwordError.textContent = '';
+        passwordInput.classList.remove('border-red-500');
+      }
+      
+      if (!isLoginMode) {
+        // Validate confirm password
+        if (confirmPasswordInput.value !== passwordInput.value) {
+          confirmPasswordError.textContent = 'Passwords do not match';
+          confirmPasswordInput.classList.add('border-red-500');
+          confirmPasswordInput.parentElement.classList.add('shake');
+          isValid = false;
+          
+          setTimeout(() => {
+            confirmPasswordInput.parentElement.classList.remove('shake');
+          }, 500);
+        } else {
+          confirmPasswordError.textContent = '';
+          confirmPasswordInput.classList.remove('border-red-500');
+        }
+      }
+      
+      return isValid;
+    }
+    
+    // Initialize calendars
+    function initializeCalendars() {
+      document.addEventListener('DOMContentLoaded', function() {
+        // Student Calendar - STATIC VERSION
+        const studentCalendarEl = document.getElementById('studentCalendar');
+        if (studentCalendarEl) {
+          const studentCalendar = new FullCalendar.Calendar(studentCalendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            // MANUALLY EDIT THESE EVENTS TO UPDATE THE CALENDAR
+            // FORMAT: {title: 'Event Name', start: 'YYYY-MM-DDThh:mm:ss', end: 'YYYY-MM-DDThh:mm:ss', backgroundColor: '#color'}
+            events: [
+              {
+                title: 'Programming Basics',
+                start: '2025-05-15T14:00:00',
+                end: '2025-05-15T15:30:00',
+                backgroundColor: '#4f46e5'
+              },
+              {
+                title: 'Web Development Workshop',
+                start: '2025-05-17T10:00:00',
+                end: '2025-05-17T12:00:00',
+                backgroundColor: '#10b981'
+              },
+              {
+                title: 'Data Science Lab',
+                start: '2025-05-20T15:00:00',
+                end: '2025-05-20T16:30:00',
+                backgroundColor: '#f97316'
+              }
+            ],
+            eventClick: function(info) {
+              showEventDetails(info.event);
+            }
+          });
+          
+          studentCalendar.render();
+        }
+        
+        // Teacher Calendar - STATIC VERSION
+        const teacherCalendarEl = document.getElementById('teacherCalendar');
+        if (teacherCalendarEl) {
+          const teacherCalendar = new FullCalendar.Calendar(teacherCalendarEl, {
+            initialView: 'timeGridWeek',
+            headerToolbar: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            // MANUALLY EDIT THESE EVENTS TO UPDATE THE CALENDAR
+            // FORMAT: {title: 'Event Name', start: 'YYYY-MM-DDThh:mm:ss', end: 'YYYY-MM-DDThh:mm:ss', backgroundColor: '#color'}
+            events: [
+              {
+                title: 'Programming Basics',
+                start: '2025-05-15T14:00:00',
+                end: '2025-05-15T15:30:00',
+                backgroundColor: '#4f46e5'
+              },
+              {
+                title: 'Web Development Workshop',
+                start: '2025-05-17T10:00:00',
+                end: '2025-05-17T12:00:00',
+                backgroundColor: '#10b981'
+              },
+              {
+                title: 'Data Science Lab',
+                start: '2025-05-20T15:00:00',
+                end: '2025-05-20T16:30:00',
+                backgroundColor: '#f97316'
+              }
+            ],
+            eventClick: function(info) {
+              showEventDetails(info.event);
+            }
+          });
+          
+          teacherCalendar.render();
+        }
+      });
+    }
+    
+    // Show event details
+    function showEventDetails(event) {
+      const modal = document.getElementById('eventDetailsModal');
+      const title = document.getElementById('eventTitle');
+      const dateTime = document.getElementById('eventDateTime');
+      const course = document.getElementById('eventCourse');
+      const description = document.getElementById('eventDescription');
+      
+      title.textContent = event.title;
+      
+      // Format date and time
+      const start = event.start;
+      const end = event.end;
+      
+      const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+      };
+      
+      const startStr = start.toLocaleString('en-US', options);
+      const endStr = end ? end.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' }) : '';
+      
+      dateTime.textContent = endStr ? `${startStr} to ${endStr}` : startStr;
+      
+      // Set mock course and description
+      course.textContent = event.title.includes('Programming') ? 'Introduction to Programming' : 
+                          event.title.includes('Web') ? 'Web Development Fundamentals' : 
+                          'Data Science Essentials';
+      
+      description.textContent = event.title.includes('Programming') ? 
+                               'In this class, we will cover the basics of programming including variables, data types, and control structures.' : 
+                               event.title.includes('Web') ? 
+                               'This workshop will focus on building responsive web interfaces using HTML, CSS, and JavaScript.' : 
+                               'In this lab session, we will explore data visualization techniques using Python libraries.';
+      
+      // Show modal
+      modal.classList.add('show');
+    }
+    
+    // Show schedule class modal
+    function showScheduleClassModal(start, end) {
+      const modal = document.getElementById('scheduleClassModal');
+      const dateInput = document.getElementById('classDate');
+      const timeInput = document.getElementById('classTime');
+      const durationInput = document.getElementById('classDuration');
+      
+      // Set date and time
+      const year = start.getFullYear();
+      const month = String(start.getMonth() + 1).padStart(2, '0');
+      const day = String(start.getDate()).padStart(2, '0');
+      dateInput.value = `${year}-${month}-${day}`;
+      
+      const hours = String(start.getHours()).padStart(2, '0');
+      const minutes = String(start.getMinutes()).padStart(2, '0');
+      timeInput.value = `${hours}:${minutes}`;
+      
+      // Calculate duration in minutes
+      if (end) {
+        const durationMs = end - start;
+        const durationMinutes = Math.round(durationMs / 60000);
+        durationInput.value = durationMinutes;
+      } else {
+        durationInput.value = 60; // Default to 60 minutes
+      }
+      
+      // Show modal
+      modal.classList.add('show');
+    }
+    
+    // Initialize dashboard tabs
+    function initializeDashboardTabs() {
+      // Add mobile sidebar toggle buttons
+      const studentDashboard = document.getElementById('studentDashboard');
+      const teacherDashboard = document.getElementById('teacherDashboard');
+      const adminDashboard = document.getElementById('adminDashboard');
+      
+      // Add toggle button to each dashboard header if not already present
+      [studentDashboard, teacherDashboard, adminDashboard].forEach(dashboard => {
+        if (dashboard) {
+          const header = dashboard.querySelector('.dashboard-header');
+          if (header && !header.querySelector('.sidebar-toggle')) {
+            const toggleBtn = document.createElement('button');
+            toggleBtn.className = 'sidebar-toggle md:hidden';
+            toggleBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            toggleBtn.style.marginRight = '1rem';
+            header.insertBefore(toggleBtn, header.firstChild);
+            
+            // Add click event
+            toggleBtn.addEventListener('click', function() {
+              const sidebar = dashboard.querySelector('.sidebar');
+              const mainContent = dashboard.querySelector('.main-content');
+              
+              sidebar.classList.toggle('show');
+              mainContent.classList.toggle('pushed');
+            });
+          }
+        }
+      });
+      
+      // Fix content area display issues - when changing tabs, ensure proper display
+      function setupSidebarNavigation(sidebarItems, contentAreas) {
+        sidebarItems.forEach(item => {
+          if (!item.classList.contains('logout-item')) {
+            item.addEventListener('click', () => {
+              // Remove active class from all sidebar items
+              sidebarItems.forEach(i => i.classList.remove('active'));
+              
+              // Add active class to clicked item
+              item.classList.add('active');
+              
+              // Hide all content areas
+              contentAreas.forEach(area => {
+                area.classList.remove('active');
+                area.style.display = 'none';
+              });
+              
+              // Show selected content area
+              const contentId = item.getAttribute('data-content');
+              const contentArea = document.getElementById(contentId);
+              if (contentArea) {
+                contentArea.classList.add('active');
+                contentArea.style.display = 'block';
+              }
+              
+              // On mobile, optionally hide sidebar after selection
+              if (window.innerWidth < 768) {
+                const sidebar = item.closest('.sidebar');
+                if (sidebar) {
+                  // Keep sidebar visible on larger screens
+                  // sidebar.classList.remove('show'); // Removed to keep sidebar visible
+                }
+              }
+            });
+          }
+        });
+      }
+      
+      // Setup navigation for each dashboard
+      setupSidebarNavigation(
+        document.querySelectorAll('#studentSidebar .sidebar-item:not(#studentLogout)'),
+        document.querySelectorAll('#studentDashboard .content-area')
+      );
+      
+      setupSidebarNavigation(
+        document.querySelectorAll('#teacherSidebar .sidebar-item:not(#teacherLogout)'),
+        document.querySelectorAll('#teacherDashboard .content-area')
+      );
+      
+      setupSidebarNavigation(
+        document.querySelectorAll('#adminSidebar .sidebar-item:not(#adminLogout)'),
+        document.querySelectorAll('#adminDashboard .content-area')
+      );
+      
+      // User management tabs
+      const studentsTab = document.getElementById('studentsTab');
+      const teachersTab = document.getElementById('teachersTab');
+      const userTable = document.getElementById('userTable');
+      
+      if (studentsTab && teachersTab) {
+        studentsTab.addEventListener('click', () => {
+          studentsTab.classList.add('border-primary-color', 'text-primary-color');
+          teachersTab.classList.remove('border-primary-color', 'text-primary-color');
+          
+          // Update table with student data
+          userTable.innerHTML = `
+            <tr>
+              <td class="py-4 px-4 border-b border-gray-200">John Doe</td>
+              <td class="py-4 px-4 border-b border-gray-200">john.doe@example.com</td>
+              <td class="py-4 px-4 border-b border-gray-200">
+                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Active</span>
+              </td>
+              <td class="py-4 px-4 border-b border-gray-200">3</td>
+              <td class="py-4 px-4 border-b border-gray-200">
+                <button class="text-blue-500 hover:text-blue-700 mr-2">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="text-red-500 hover:text-red-700">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td class="py-4 px-4 border-b border-gray-200">Alice Johnson</td>
+              <td class="py-4 px-4 border-b border-gray-200">alice.johnson@example.com</td>
+              <td class="py-4 px-4 border-b border-gray-200">
+                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Active</span>
+              </td>
+              <td class="py-4 px-4 border-b border-gray-200">2</td>
+              <td class="py-4 px-4 border-b border-gray-200">
+                <button class="text-blue-500 hover:text-blue-700 mr-2">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="text-red-500 hover:text-red-700">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+        
+        teachersTab.addEventListener('click', () => {
+          teachersTab.classList.add('border-primary-color', 'text-primary-color');
+          studentsTab.classList.remove('border-primary-color', 'text-primary-color');
+          
+          // Update table with teacher data
+          userTable.innerHTML = `
+            <tr>
+              <td class="py-4 px-4 border-b border-gray-200">Jane Smith</td>
+              <td class="py-4 px-4 border-b border-gray-200">jane.smith@example.com</td>
+              <td class="py-4 px-4 border-b border-gray-200">
+                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Active</span>
+              </td>
+              <td class="py-4 px-4 border-b border-gray-200">2</td>
+              <td class="py-4 px-4 border-b border-gray-200">
+                <button class="text-blue-500 hover:text-blue-700 mr-2">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="text-red-500 hover:text-red-700">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td class="py-4 px-4 border-b border-gray-200">Robert Brown</td>
+              <td class="py-4 px-4 border-b border-gray-200">robert.brown@example.com</td>
+              <td class="py-4 px-4 border-b border-gray-200">
+                <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">Pending</span>
+              </td>
+              <td class="py-4 px-4 border-b border-gray-200">1</td>
+              <td class="py-4 px-4 border-b border-gray-200">
+                <button class="text-blue-500 hover:text-blue-700 mr-2">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="text-red-500 hover:text-red-700">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+      }
+    }
+    
+    // Initialize modals
+    function initializeModals() {
+      // Create Course Modal
+      const createCourseBtn = document.getElementById('createCourseBtn');
+      const createCourseModal = document.getElementById('createCourseModal');
+      const closeCourseModal = document.getElementById('closeCourseModal');
+      const cancelCourseBtn = document.getElementById('cancelCourseBtn');
+      const createCourseForm = document.getElementById('createCourseForm');
+      
+      if (createCourseBtn && createCourseModal) {
+        createCourseBtn.addEventListener('click', () => {
+          createCourseModal.classList.add('show');
+        });
+        
+        closeCourseModal.addEventListener('click', () => {
+          createCourseModal.classList.remove('show');
+        });
+        
+        cancelCourseBtn.addEventListener('click', () => {
+          createCourseModal.classList.remove('show');
+        });
+        
+        createCourseForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          // Show success toast
+          showToast('Course created successfully!', 'success');
+          
+          // Close modal
+          createCourseModal.classList.remove('show');
+        });
+      }
+      
+      // Schedule Class Modal
+      const scheduleClassModal = document.getElementById('scheduleClassModal');
+      const closeScheduleModal = document.getElementById('closeScheduleModal');
+      const cancelScheduleBtn = document.getElementById('cancelScheduleBtn');
+      const scheduleClassForm = document.getElementById('scheduleClassForm');
+      
+      if (scheduleClassModal) {
+        closeScheduleModal.addEventListener('click', () => {
+          scheduleClassModal.classList.remove('show');
+        });
+        
+        cancelScheduleBtn.addEventListener('click', () => {
+          scheduleClassModal.classList.remove('show');
+        });
+        
+        scheduleClassForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          // Show success toast
+          showToast('Class scheduled successfully!', 'success');
+          
+          // Close modal
+          scheduleClassModal.classList.remove('show');
+        });
+      }
+      
+      // Event Details Modal
+      const eventDetailsModal = document.getElementById('eventDetailsModal');
+      const closeEventModal = document.getElementById('closeEventModal');
+      const closeEventDetailsBtn = document.getElementById('closeEventDetailsBtn');
+      
+      if (eventDetailsModal) {
+        closeEventModal.addEventListener('click', () => {
+          eventDetailsModal.classList.remove('show');
+        });
+        
+        closeEventDetailsBtn.addEventListener('click', () => {
+          eventDetailsModal.classList.remove('show');
+        });
+      }
+    }
+    
+    // Initialize toasts
+    function initializeToasts() {
+      // Create toast container if it doesn't exist
+      if (!document.getElementById('toastContainer')) {
+        const toastContainer = document.createElement('div');
+        toastContainer.id = 'toastContainer';
+        toastContainer.className = 'toast-container';
+        document.body.appendChild(toastContainer);
+      }
+    }
+    
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toastContainer = document.getElementById('toastContainer');
+      
+      // Create toast element
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      
+      // Add icon based on type
+      const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+      
+      toast.innerHTML = `
+        <i class="fas fa-${icon} toast-icon"></i>
+        <div class="toast-message">${message}</div>
+      `;
+      
+      // Add to container
+      toastContainer.appendChild(toast);
+      
+      // Show toast with animation
+      setTimeout(() => {
+        toast.classList.add('show');
+      }, 10);
+      
+      // Remove toast after delay
+      setTimeout(() => {
+        toast.classList.remove('show');
+        
+        // Remove from DOM after animation completes
+        setTimeout(() => {
+          toastContainer.removeChild(toast);
+        }, 300);
+      }, 3000);
+    }
+    
+    // Logout user
+    function logoutUser() {
+      // Hide all dashboards
+      document.getElementById('studentDashboard').style.display = 'none';
+      document.getElementById('teacherDashboard').style.display = 'none';
+      document.getElementById('adminDashboard').style.display = 'none';
+      
+      // Show login screen
+      document.getElementById('loginScreen').style.display = 'flex';
+      
+      // Show success toast
+      showToast('Logged out successfully!', 'success');
+    }
+    
+    // Initialize file upload
+    function initializeFileUpload() {
+      const contentDropzone = document.getElementById('contentDropzone');
+      const uploadContentBtn = document.getElementById('uploadContentBtn');
+      
+      if (contentDropzone) {
+        // Update dropzone content to indicate manual update method
+        contentDropzone.innerHTML = `
+          <i class="fas fa-info-circle text-4xl text-gray-400 mb-4"></i>
+          <p>This is a static demo version.</p>
+          <p class="text-sm text-gray-500 mt-2">To add new content, edit the HTML directly in the source code.</p>
+        `;
+        
+        // Simplify button click
+        if (uploadContentBtn) {
+          uploadContentBtn.addEventListener('click', () => {
+            showToast('This is a static demo. Update content by editing the source code.', 'info');
+          });
+        }
+      }
+    }
+    
+    // Initialize ad preview
+    function initializeAdPreview() {
+      const adFile = document.getElementById('adFile');
+      const adPreview = document.getElementById('adPreview');
+      const adForm = document.getElementById('adForm');
+      
+      if (adPreview) {
+        // Update preview content to indicate manual update method
+        adPreview.innerHTML = `
+          <div class="text-center">
+            <i class="fas fa-info-circle text-4xl text-gray-400 mb-4"></i>
+            <p>This is a static demo version.</p>
+            <p class="text-sm text-gray-500 mt-2">To add new advertisements, edit the HTML directly in the source code.</p>
+          </div>
+        `;
+        
+        // Simplify form submission
+        if (adForm) {
+          adForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('This is a static demo. Update ads by editing the source code.', 'info');
+          });
+        }
+      }
+    }
+    
+    // Initialize range sliders
+    function initializeRangeSliders() {
+      const uploadLimit = document.getElementById('uploadLimit');
+      const uploadLimitValue = document.getElementById('uploadLimitValue');
+      
+      if (uploadLimit && uploadLimitValue) {
+        uploadLimit.addEventListener('input', () => {
+          uploadLimitValue.textContent = `${uploadLimit.value}MB`;
+        });
+      }
+      
+      // Handle site settings form
+      const siteSettingsForm = document.getElementById('siteSettingsForm');
+      
+      if (siteSettingsForm) {
+        siteSettingsForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          // Show success toast
+          showToast('Settings saved successfully!', 'success');
+        });
+      }
+      
+      // Handle profile forms
+      const studentProfileForm = document.getElementById('studentProfileForm');
+      const teacherProfileForm = document.getElementById('teacherProfileForm');
+      
+      if (studentProfileForm) {
+        studentProfileForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          // Show success toast
+          showToast('Profile updated successfully!', 'success');
+        });
+      }
+      
+      if (teacherProfileForm) {
+        teacherProfileForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          // Show success toast
+          showToast('Profile updated successfully!', 'success');
+        });
+      }
+    }
+    
+    // Initialize the new features
+    document.addEventListener('DOMContentLoaded', function() {
+      // ... existing initializations ...
+      initializeCourseEnterButtons();
+      initializeTimetableView();
+      initializeAdSlider();
+    });
+    
+    // Course Enter Button Behavior
+    function initializeCourseEnterButtons() {
+      const courseButtons = document.querySelectorAll('.course-card .btn');
+      const myCoursesArea = document.getElementById('myCourses');
+      const courseContentArea = document.getElementById('courseContent');
+      const backToCourses = document.getElementById('backToCourses');
+      
+      if (courseButtons.length && myCoursesArea && courseContentArea) {
+        courseButtons.forEach((button, index) => {
+          button.addEventListener('click', function() {
+            // Fade out courses list
+            myCoursesArea.classList.add('fade-out');
+            
+            setTimeout(() => {
+              // Hide courses list
+              myCoursesArea.classList.remove('active');
+              myCoursesArea.style.display = 'none';
+              myCoursesArea.classList.remove('fade-out');
+              
+              // Update course content based on which course was clicked
+              updateCourseContent(index);
+              
+              // Show course content
+              courseContentArea.classList.add('active');
+              courseContentArea.style.display = 'block';
+              courseContentArea.classList.add('fade-in');
+              
+              setTimeout(() => {
+                courseContentArea.classList.remove('fade-in');
+              }, 400);
+            }, 400);
+          });
+        });
+        
+        // Back button functionality
+        if (backToCourses) {
+          backToCourses.addEventListener('click', function() {
+            // Fade out course content
+            courseContentArea.classList.add('fade-out');
+            
+            setTimeout(() => {
+              // Hide course content
+              courseContentArea.classList.remove('active');
+              courseContentArea.style.display = 'none';
+              courseContentArea.classList.remove('fade-out');
+              
+              // Show courses list
+              myCoursesArea.classList.add('active');
+              myCoursesArea.style.display = 'block';
+              myCoursesArea.classList.add('fade-in');
+              
+              setTimeout(() => {
+                myCoursesArea.classList.remove('fade-in');
+              }, 400);
+            }, 400);
+          });
+        }
+      }
+    }
+    
+    // Update course content based on which course was clicked
+    function updateCourseContent(courseIndex) {
+      const courseTitleHeader = document.getElementById('courseTitleHeader');
+      const courseDescriptionText = document.getElementById('courseDescriptionText');
+      const courseMaterials = document.getElementById('courseMaterials');
+      const courseAssignments = document.getElementById('courseAssignments');
+      const courseLiveLessons = document.getElementById('courseLiveLessons');
+      const courseVideoContainer = document.getElementById('courseVideoContainer');
+      const courseVideoPlayer = document.getElementById('courseVideoPlayer');
+      
+      // Course data - can be expanded or modified manually
+      const courses = [
+        {
+          title: "Introduction to Programming",
+          description: "Learn the basics of programming with Python, including variables, data types, and control structures.",
+          materials: [
+            { type: "pdf", name: "Introduction to Python.pdf" },
+            { type: "video", name: "Variables and Data Types.mp4" },
+            { type: "code", name: "Practice Examples.zip" }
+          ],
+          assignments: [
+            { name: "Assignment 1: Basic Syntax", status: "completed" },
+            { name: "Assignment 2: Functions", status: "in-progress" },
+            { name: "Assignment 3: Loops", status: "not-started" }
+          ],
+          liveLessons: [
+            { name: "Monday - Introduction to Variables (10:00 AM)" },
+            { name: "Wednesday - Control Structures (2:00 PM)" },
+            { name: "Friday - Functions & Methods (11:00 AM)" }
+          ]
+        },
+        {
+          title: "Web Development Fundamentals",
+          description: "Learn HTML, CSS, and JavaScript to build responsive and interactive websites.",
+          materials: [
+            { type: "pdf", name: "HTML Basics.pdf" },
+            { type: "pdf", name: "CSS Styling Guide.pdf" },
+            { type: "video", name: "JavaScript Fundamentals.mp4" }
+          ],
+          assignments: [
+            { name: "Assignment 1: HTML Structure", status: "completed" },
+            { name: "Assignment 2: CSS Layouts", status: "completed" },
+            { name: "Assignment 3: JavaScript Events", status: "in-progress" }
+          ],
+          liveLessons: [
+            { name: "Tuesday - HTML & Document Structure (9:00 AM)" },
+            { name: "Thursday - CSS Layouts & Flexbox (1:00 PM)" },
+            { name: "Saturday - JavaScript Basics (10:00 AM)" }
+          ]
+        },
+        {
+          title: "Data Science Essentials",
+          description: "Introduction to data analysis and visualization using Python libraries.",
+          materials: [
+            { type: "pdf", name: "Introduction to Data Science.pdf" },
+            { type: "video", name: "NumPy and Pandas Basics.mp4" },
+            { type: "code", name: "Data Visualization Examples.zip" }
+          ],
+          assignments: [
+            { name: "Assignment 1: Data Cleaning", status: "in-progress" },
+            { name: "Assignment 2: Data Analysis", status: "not-started" },
+            { name: "Assignment 3: Data Visualization", status: "not-started" }
+          ],
+          liveLessons: [
+            { name: "Monday - Introduction to NumPy (11:00 AM)" },
+            { name: "Wednesday - Pandas DataFrames (3:00 PM)" },
+            { name: "Friday - Data Visualization with Matplotlib (1:00 PM)" }
+          ]
+        }
+      ];
+      
+      // Select course based on index, with fallback to first course
+      const course = courses[courseIndex] || courses[0];
+      
+      // Update course title and description
+      if (courseTitleHeader) courseTitleHeader.textContent = course.title;
+      if (courseDescriptionText) courseDescriptionText.textContent = course.description;
+      
+      // Update materials list
+      if (courseMaterials) {
+        let materialsHTML = '';
+        course.materials.forEach(material => {
+          let icon = 'file';
+          let color = 'gray';
+          
+          if (material.type === 'pdf') {
+            icon = 'file-pdf';
+            color = 'red';
+          } else if (material.type === 'video') {
+            icon = 'video';
+            color = 'blue';
+          } else if (material.type === 'code') {
+            icon = 'file-code';
+            color = 'green';
+          }
+          
+          materialsHTML += `
+            <li class="flex items-center">
+              <i class="fas fa-${icon} text-${color}-500 mr-2"></i>
+              <a href="#" class="text-blue-600 hover:underline">${material.name}</a>
+            </li>
+          `;
+        });
+        
+        courseMaterials.innerHTML = materialsHTML;
+      }
+      
+      // Update assignments list
+      if (courseAssignments) {
+        let assignmentsHTML = '';
+        course.assignments.forEach(assignment => {
+          let statusClass = 'gray';
+          let statusText = 'Not Started';
+          
+          if (assignment.status === 'completed') {
+            statusClass = 'green';
+            statusText = 'Completed';
+          } else if (assignment.status === 'in-progress') {
+            statusClass = 'yellow';
+            statusText = 'In Progress';
+          }
+          
+          assignmentsHTML += `
+            <li class="flex justify-between items-center">
+              <div class="flex items-center">
+                <i class="fas fa-tasks text-purple-500 mr-2"></i>
+                <span>${assignment.name}</span>
+              </div>
+              <span class="text-sm bg-${statusClass}-100 text-${statusClass}-800 px-2 py-1 rounded">${statusText}</span>
+            </li>
+          `;
+        });
+        
+        courseAssignments.innerHTML = assignmentsHTML;
+      }
+      
+      // Update live lessons list
+      if (courseLiveLessons) {
+        let liveLessonsHTML = '';
+        course.liveLessons.forEach(lesson => {
+          liveLessonsHTML += `
+            <li class="flex items-center">
+              <i class="fas fa-video-camera text-purple-500 mr-2"></i>
+              <a href="#" class="text-blue-600 hover:underline">${lesson.name}</a>
+            </li>
+          `;
+        });
+        
+        courseLiveLessons.innerHTML = liveLessonsHTML;
+      }
+      
+      // Update video content if available
+      if (courseVideoContainer && courseVideoPlayer) {
+        // Demo video URLs - in a real app these would come from your course data
+        const courseVideos = [
+          "https://www.youtube.com/embed/rfscVS0vtbw", // Python tutorial
+          "https://www.youtube.com/embed/qz0aGYrrlhU", // HTML/CSS tutorial
+          "https://www.youtube.com/embed/r-uOLxNrNk8"  // Data Science tutorial
+        ];
+        
+        // Set the video source based on course index
+        const videoUrl = courseVideos[courseIndex] || courseVideos[0];
+        courseVideoPlayer.src = videoUrl;
+        
+        // Make sure the video container is visible
+        courseVideoContainer.style.display = 'block';
+        
+        // Clear any existing notes
+        const videoNotes = document.getElementById('videoNotes');
+        if (videoNotes) {
+          videoNotes.value = '';
+        }
+      }
+    }
+    
+    // Initialize timetable view
+    function initializeTimetableView() {
+      const studentCalendarEl = document.getElementById('studentCalendar');
+      const timetableDetails = document.getElementById('timetableDetails');
+      
+      if (studentCalendarEl && timetableDetails) {
+        // Add a button to view timetable (only one button, not duplicated)
+        const calendarContainer = document.querySelector('.calendar-container');
+        
+        // Check if button already exists to avoid duplication
+        if (!calendarContainer.querySelector('.view-timetable-btn')) {
+          const viewTimetableBtn = document.createElement('button');
+          viewTimetableBtn.className = 'btn btn-primary mt-4 view-timetable-btn';
+          viewTimetableBtn.innerHTML = '<i class="fas fa-table mr-2"></i> View Detailed Timetable';
+          calendarContainer.appendChild(viewTimetableBtn);
+          
+          // Add click event to button
+          viewTimetableBtn.addEventListener('click', function() {
+            // Check if timetable is already visible
+            if (timetableDetails.classList.contains('show')) {
+              // Hide timetable
+              timetableDetails.classList.remove('show');
+              setTimeout(() => {
+                timetableDetails.classList.add('hidden');
+              }, 400);
+            } else {
+              // Show timetable
+              timetableDetails.classList.remove('hidden');
+              setTimeout(() => {
+                timetableDetails.classList.add('show');
+              }, 10);
+            }
+          });
+        }
+        
+        // Also show timetable when clicking on calendar events
+        const studentCalendar = document.querySelector('.fc');
+        if (studentCalendar) {
+          studentCalendar.addEventListener('click', function(e) {
+            // Check if clicked element is an event
+            if (e.target.closest('.fc-event')) {
+              // Show timetable if hidden
+              if (!timetableDetails.classList.contains('show')) {
+                timetableDetails.classList.remove('hidden');
+                setTimeout(() => {
+                  timetableDetails.classList.add('show');
+                }, 10);
+              }
+            }
+          });
+        }
+      }
+    }
+    
+    // Initialize ad slider
+    function initializeAdSlider() {
+      const adsSection = document.getElementById('adsSection');
+      const adsSlider = document.querySelector('.ads-slider');
+      const prevBtn = document.getElementById('prevAd');
+      const nextBtn = document.getElementById('nextAd');
+      const slides = document.querySelectorAll('.ad-slide');
+      
+      // Add responsive class to ads section
+      if (adsSection) {
+        adsSection.classList.add('responsive-ads');
+      }
+      
+      if (adsSlider && slides.length) {
+        let currentSlide = 0;
+        const slideCount = slides.length;
+        
+        // Set initial position
+        adsSlider.style.transform = `translateX(0)`;
+        
+        // Auto slide function
+        function autoSlide() {
+          currentSlide = (currentSlide + 1) % slideCount;
+          adsSlider.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+        
+        // Start auto slider
+        let slideInterval = setInterval(autoSlide, 5000);
+        
+        // Previous button
+        if (prevBtn) {
+          prevBtn.addEventListener('click', function() {
+            clearInterval(slideInterval);
+            currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+            adsSlider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            slideInterval = setInterval(autoSlide, 5000);
+          });
+        }
+        
+        // Next button
+        if (nextBtn) {
+          nextBtn.addEventListener('click', function() {
+            clearInterval(slideInterval);
+            currentSlide = (currentSlide + 1) % slideCount;
+            adsSlider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            slideInterval = setInterval(autoSlide, 5000);
+          });
+        }
+      }
+    }
+  </script>
+</body>
+</html>
