@@ -683,6 +683,176 @@
       </form>
     </div>
   </div>
+  <!--new header and button-->
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduLearn Floating Menu</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f5f7fa;
+      height: 100vh;
+      position: relative;
+    }
+
+    header {
+      background-color: #4f46e5;
+      color: white;
+      font-weight: 600;
+      font-size: 1.75rem;
+      padding: 1rem 2rem;
+      text-align: center;
+      user-select: none;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Floating button container */
+    .floating-btn-container {
+      position: fixed;
+      right: 2rem;
+      bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      z-index: 1000;
+    }
+
+    /* Main floating button */
+    .floating-btn {
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(79, 70, 229, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      user-select: none;
+      margin: -73px -182px;
+    }
+    .floating-btn:hover {
+      background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+      transform: scale(1.1);
+    }
+
+    /* Menu buttons hidden by default */
+    .menu-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .menu-buttons.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* Individual menu buttons */
+    .menu-btn {
+      background: white;
+      border: none;
+      border-radius: 24px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      color: #4f46e5;
+      padding: 10px 20px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      white-space: nowrap;
+    }
+    .menu-btn:hover {
+      background-color: #4f46e5;
+      color: white;
+    }
+    .menu-btn i {
+      font-size: 1.2rem;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  
+  <header><a href="http://www.w3.org/2000/svg" title="hat icons">Edulearn</a></header>
+
+  <div class="floating-btn-container" aria-label="Floating menu for navigation" role="navigation">
+    <button aria-expanded="false" aria-controls="menuButtons" aria-label="Toggle menu" class="floating-btn" id="mainFloatingBtn">
+      <i class="fas fa-plus"></i>
+    </button>
+    <div class="menu-buttons" id="menuButtons" role="menu">
+      <a href="https://edulearnit.netlify.app/" ><button role="menuitem" class="menu-btn" onclick="alert('Navigate to Courses')" tabindex="-1">
+        <i class="fas fa-book"></i> Courses
+      </button></a>
+      <a href="https://timetable.42web.io/" target="_blank"><button role="menuitem" class="menu-btn" onclick="alert('Navigate to Schedule')" tabindex="-1">
+        <i class="fas fa-calendar-alt"></i> Schedule
+      </button></a>
+    </div>
+  </div>
+
+  <script>
+    const mainBtn = document.getElementById('mainFloatingBtn');
+    const menuButtons = document.getElementById('menuButtons');
+
+    mainBtn.addEventListener('click', () => {
+      const expanded = mainBtn.getAttribute('aria-expanded') === 'true';
+      if(expanded) {
+        menuButtons.classList.remove('show');
+        mainBtn.setAttribute('aria-expanded', 'false');
+        mainBtn.querySelector('i').classList.remove('fa-times');
+        mainBtn.querySelector('i').classList.add('fa-plus');
+        // Remove tabindex to menu buttons
+        menuButtons.querySelectorAll('button').forEach(btn => btn.tabIndex = -1);
+      } else {
+        menuButtons.classList.add('show');
+        mainBtn.setAttribute('aria-expanded', 'true');
+        mainBtn.querySelector('i').classList.remove('fa-plus');
+        mainBtn.querySelector('i').classList.add('fa-times');
+        // Make menu buttons focusable
+        menuButtons.querySelectorAll('button').forEach(btn => btn.tabIndex = 0);
+      }
+    });
+
+    // Close menu if clicking outside
+    document.addEventListener('click', (e) => {
+      if (!mainBtn.contains(e.target) && !menuButtons.contains(e.target) && menuButtons.classList.contains('show')) {
+        menuButtons.classList.remove('show');
+        mainBtn.setAttribute('aria-expanded', 'false');
+        mainBtn.querySelector('i').classList.remove('fa-times');
+        mainBtn.querySelector('i').classList.add('fa-plus');
+        menuButtons.querySelectorAll('button').forEach(btn => btn.tabIndex = -1);
+      }
+    });
+
+    // Initialize menu buttons tabindex to -1 (hidden)
+    menuButtons.querySelectorAll('button').forEach(btn => btn.tabIndex = -1);
+  </script>
+</body>
+</html>
+
+
   
   <!-- Student Dashboard -->
   <div class="dashboard-container" id="studentDashboard">
