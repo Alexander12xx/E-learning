@@ -646,213 +646,240 @@
         <div class="login-tab" data-role="teacher">Teacher</div>
         <div class="login-tab" data-role="admin">Admin</div>
       </div>
-      
-      <form class="login-form" id="loginForm">
-        <div class="form-group">
-          <input type="text" class="form-input" placeholder="Name" id="nameInput" required>
-          <div class="form-error" id="nameError"></div>
-        </div>
-        
-        <div class="form-group">
-          <input type="tel" class="form-input" placeholder="Phone Number" id="phoneInput" required>
-          <div class="form-error" id="phoneError"></div>
-        </div>
-        
-        <div class="form-group">
-          <input type="email" class="form-input" placeholder="Email" id="emailInput" required>
-          <div class="form-error" id="emailError"></div>
-        </div>
-        
-        <div class="form-group">
-          <input type="text" class="form-input" placeholder="Username" id="usernameInput" required>
-          <div class="form-error" id="usernameError"></div>
-        </div>
-        
-        <div class="form-group">
-          <input type="password" class="form-input" placeholder="Password" id="passwordInput" required>
-          <div class="form-error" id="passwordError"></div>
-        </div>
-        
-     
-        <div class="flex justify-between items-center">
-          <div class="text-sm">
-            <a href="javascript:void(0)" class="text-primary-color" id="toggleLoginRegister">Already have an account? Login</a>
+      <div class="flex flex-col md:flex-row gap-8">
+        <!-- Register Section -->
+        <form class="login-form w-full md:w-1/2" id="registerForm">
+          <h2 class="text-lg font-semibold mb-4 text-center">Register</h2>
+          <div class="form-group">
+            <input type="text" class="form-input" placeholder="Name" id="nameInput" required>
+            <div class="form-error" id="nameError"></div>
           </div>
-          <button type="submit" class="btn btn-primary" id="submitBtn">Register</button>
-        </div>
-      </form>
+          <div class="form-group">
+            <input type="tel" class="form-input" placeholder="Phone Number" id="phoneInput" required>
+            <div class="form-error" id="phoneError"></div>
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-input" placeholder="Email" id="emailInput" required>
+            <div class="form-error" id="emailError"></div>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-input" placeholder="Username" id="usernameInput" required>
+            <div class="form-error" id="usernameError"></div>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-input" placeholder="Password" id="passwordInput" required>
+            <div class="form-error" id="passwordError"></div>
+          </div>
+          <div class="form-group" id="confirmPasswordGroup">
+            <input type="password" class="form-input" placeholder="Confirm Password" id="confirmPasswordInput" required>
+            <div class="form-error" id="confirmPasswordError"></div>
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="text-sm">
+              <a href="javascript:void(0)" class="text-primary-color" id="showLoginSection">Already have an account? Login</a>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submitBtn">Register</button>
+          </div>
+        </form>
+        <!-- Login Section -->
+        <form class="login-form w-full md:w-1/2 hidden" id="loginForm">
+          <h2 class="text-lg font-semibold mb-4 text-center">Login</h2>
+          <div class="form-group">
+            <input type="text" class="form-input" placeholder="Username" id="loginUsernameInput" required>
+            <div class="form-error" id="loginUsernameError"></div>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-input" placeholder="Password" id="loginPasswordInput" required>
+            <div class="form-error" id="loginPasswordError"></div>
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="text-sm">
+              <a href="javascript:void(0)" class="text-primary-color" id="showRegisterSection">Don't have an account? Register</a>
+            </div>
+            <button type="submit" class="btn btn-primary" id="loginSubmitBtn">Login</button>
+          </div>
+        </form>
+      </div>
     </div>
+    <script>
+      // Toggle between register and login forms
+      document.addEventListener('DOMContentLoaded', function () {
+        const registerForm = document.getElementById('registerForm');
+        const loginForm = document.getElementById('loginForm');
+        const showLoginSection = document.getElementById('showLoginSection');
+        const showRegisterSection = document.getElementById('showRegisterSection');
+
+        if (showLoginSection) {
+          showLoginSection.onclick = function () {
+            registerForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+          };
+        }
+        if (showRegisterSection) {
+          showRegisterSection.onclick = function () {
+            loginForm.classList.add('hidden');
+            registerForm.classList.remove('hidden');
+          };
+        }
+
+        // Login form submission
+        if (loginForm) {
+          loginForm.onsubmit = function (e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsernameInput').value;
+            const password = document.getElementById('loginPasswordInput').value;
+            // HARDCODED CREDENTIALS: username="STUDENT", password="ALTECHSTUDENT"
+            if (username === 'STUDENT' && password === 'ALTECHSTUDENT') {
+              document.getElementById('loginScreen').style.display = 'none';
+              document.getElementById('studentDashboard').style.display = 'block';
+              showToast('Login successful!', 'success');
+            } else if (username === 'TEACHER' && password === 'ALTECHTEACHER') {
+              document.getElementById('loginScreen').style.display = 'none';
+              document.getElementById('teacherDashboard').style.display = 'block';
+              showToast('Login successful!', 'success');
+            } else if (username === 'ADMIN' && password === 'ALTECHADMIN') {
+              document.getElementById('loginScreen').style.display = 'none';
+              document.getElementById('adminDashboard').style.display = 'block';
+              showToast('Login successful!', 'success');
+            } else {
+              showToast('Invalid credentials. Use the common logins (STUDENT/ALTECHSTUDENT, TEACHER/ALTECHTEACHER, ADMIN/ALTECHADMIN)', 'error');
+            }
+          };
+        }
+        // Register form submission (for demo, just show a toast)
+        if (registerForm) {
+          registerForm.onsubmit = function (e) {
+            e.preventDefault();
+            showToast('Registration successful! You can now log in.', 'success');
+            registerForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+          };
+        }
+      });
+    </script>
   </div>
-  <!--new header and button-->
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EduLearn Floating Menu</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
-
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #f5f7fa;
-      height: 100vh;
-      position: relative;
-    }
-
-    header {
-      background-color: #4f46e5;
-      color: white;
-      font-weight: 600;
-      font-size: 1.75rem;
-      padding: 1rem 2rem;
-      text-align: center;
-      user-select: none;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-
-    /* Floating button container */
-    .floating-btn-container {
-      position: fixed;
-      right: 2rem;
-      bottom: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      z-index: 1000;
-    }
-
-    /* Main floating button */
-    .floating-btn {
-      background: linear-gradient(135deg, #99999e 0%, #686675 100%);
-      border: none;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      color: white;
-      font-size: 28px;
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(79, 70, 229, 0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      user-select: none;
-       position: fixed; /* Ensures it's properly placed */
-    right: 20px; /* Moves it to the right margin */
-    bottom: 35px; /* Places it near the bottom */
-    }
-    .floating-btn:hover {
-      background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
-      transform: scale(1.1);
-    }
-
-    /* Menu buttons hidden by default */
-    .menu-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(20px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    .menu-buttons.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    /* Individual menu buttons */
-    .menu-btn {
-      background: white;
-      border: none;
-      border-radius: 24px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-      color: #4f46e5;
-      padding: 10px 20px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: background-color 0.2s ease, color 0.2s ease;
-      white-space: nowrap;
-    }
-    .menu-btn:hover {
-      background-color: #4f46e5;
-      color: white;
-    }
-    .menu-btn i {
-      font-size: 1.2rem;
-    }
-  </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-</head>
-<body>
-  
-  <header><a href="http://www.w3.org/2000/svg" title="hat icons">Edulearn</a></header>
-
-  <div class="floating-btn-container" aria-label="Floating menu for navigation" role="navigation">
-    <button aria-expanded="false" aria-controls="menuButtons" aria-label="Toggle menu" class="floating-btn" id="mainFloatingBtn">
-      <i class="fas fa-plus"></i>
-    </button>
-    <div class="menu-buttons" id="menuButtons" role="menu">
-      <a href="https://edulearnit.netlify.app/" ><button role="menuitem" class="menu-btn" onclick="alert('Navigate to Courses')" tabindex="-1">
+<!--new header and button-->
+<header style="background-color: #4f46e5; color: white; font-weight: 600; font-size: 1.75rem; padding: 1rem 2rem; text-align: center; user-select: none; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+  <a href="#" style="color: inherit; text-decoration: none;">Edulearn</a>
+</header>
+<style>
+  /* Floating button and menu styles */
+  .floating-btn-container {
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    z-index: 1000;
+  }
+  .floating-btn {
+    background: linear-gradient(135deg, #99999e 0%, #686675 100%);
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(79, 70, 229, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    user-select: none;
+  }
+  .floating-btn:hover {
+    background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+    transform: scale(1.1);
+  }
+  .menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .menu-buttons.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .menu-btn {
+    background: white;
+    border: none;
+    border-radius: 24px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    color: #4f46e5;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+  }
+  .menu-btn:hover {
+    background-color: #4f46e5;
+    color: white;
+  }
+  .menu-btn i {
+    font-size: 1.2rem;
+  }
+</style>
+<div class="floating-btn-container" aria-label="Floating menu for navigation" role="navigation">
+  <button aria-expanded="false" aria-controls="menuButtons" aria-label="Toggle menu" class="floating-btn" id="mainFloatingBtn">
+    <i class="fas fa-plus"></i>
+  </button>
+  <div class="menu-buttons" id="menuButtons" role="menu">
+    <a href="https://edulearnit.netlify.app/">
+      <button role="menuitem" class="menu-btn" onclick="alert('Navigate to Courses')" tabindex="-1">
         <i class="fas fa-book"></i> Courses
-      </button></a>
-      <a href="https://timetable.42web.io/" target="_blank"><button role="menuitem" class="menu-btn" onclick="alert('Navigate to Schedule')" tabindex="-1">
+      </button>
+    </a>
+    <a href="https://timetable.42web.io/" target="_blank">
+      <button role="menuitem" class="menu-btn" onclick="alert('Navigate to Schedule')" tabindex="-1">
         <i class="fas fa-calendar-alt"></i> Schedule
-      </button></a>
-    </div>
+      </button>
+    </a>
   </div>
-
-  <script>
-    const mainBtn = document.getElementById('mainFloatingBtn');
-    const menuButtons = document.getElementById('menuButtons');
-
-    mainBtn.addEventListener('click', () => {
-      const expanded = mainBtn.getAttribute('aria-expanded') === 'true';
-      if(expanded) {
-        menuButtons.classList.remove('show');
-        mainBtn.setAttribute('aria-expanded', 'false');
-        mainBtn.querySelector('i').classList.remove('fa-times');
-        mainBtn.querySelector('i').classList.add('fa-plus');
-        // Remove tabindex to menu buttons
-        menuButtons.querySelectorAll('button').forEach(btn => btn.tabIndex = -1);
-      } else {
-        menuButtons.classList.add('show');
-        mainBtn.setAttribute('aria-expanded', 'true');
-        mainBtn.querySelector('i').classList.remove('fa-plus');
-        mainBtn.querySelector('i').classList.add('fa-times');
-        // Make menu buttons focusable
-        menuButtons.querySelectorAll('button').forEach(btn => btn.tabIndex = 0);
-      }
-    });
-
-    // Close menu if clicking outside
-    document.addEventListener('click', (e) => {
-      if (!mainBtn.contains(e.target) && !menuButtons.contains(e.target) && menuButtons.classList.contains('show')) {
-        menuButtons.classList.remove('show');
-        mainBtn.setAttribute('aria-expanded', 'false');
-        mainBtn.querySelector('i').classList.remove('fa-times');
-        mainBtn.querySelector('i').classList.add('fa-plus');
-        menuButtons.querySelectorAll('button').forEach(btn => btn.tabIndex = -1);
-      }
-    });
-
-    // Initialize menu buttons tabindex to -1 (hidden)
-    menuButtons.querySelectorAll('button').forEach(btn => btn.tabIndex = -1);
-  </script>
-</body>
-</html>
+</div>
+<script>
+  const mainBtn = document.getElementById('mainFloatingBtn');
+  const menuButtons = document.getElementById('menuButtons');
+  mainBtn.addEventListener('click', () => {
+    const expanded = mainBtn.getAttribute('aria-expanded') === 'true';
+    if(expanded) {
+      menuButtons.classList.remove('show');
+      mainBtn.setAttribute('aria-expanded', 'false');
+      mainBtn.querySelector('i').classList.remove('fa-times');
+      mainBtn.querySelector('i').classList.add('fa-plus');
+      menuButtons.querySelectorAll('button').forEach(btn => btn.tabIndex = -1);
+    } else {
+      menuButtons.classList.add('show');
+      mainBtn.setAttribute('aria-expanded', 'true');
+      mainBtn.querySelector('i').classList.remove('fa-plus');
+      mainBtn.querySelector('i').classList.add('fa-times');
+      menuButtons.querySelectorAll('button').forEach(btn => btn.tabIndex = 0);
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!mainBtn.contains(e.target) && !menuButtons.contains(e.target) && menuButtons.classList.contains('show')) {
+      menuButtons.classList.remove('show');
+      mainBtn.setAttribute('aria-expanded', 'false');
+      mainBtn.querySelector('i').classList.remove('fa-times');
+      mainBtn.querySelector('i').classList.add('fa-plus');
+      menuButtons.querySelectorAll('button').forEach(btn => btn.tabIndex = -1);
+    }
+  });
+  menuButtons.querySelectorAll('button').forEach(btn => btn.tabIndex = -1);
+</script>
 
 
   
@@ -928,7 +955,29 @@
           </div>
         </div>
       </div>
-      
+      <script>
+        // Make the entire course card clickable (navigate to course content)
+        document.addEventListener('DOMContentLoaded', function () {
+          const courseCards = document.querySelectorAll('.course-card');
+          const courseButtons = document.querySelectorAll('.course-card .btn');
+          const myCoursesArea = document.getElementById('myCourses');
+          const courseContentArea = document.getElementById('courseContent');
+          const backToCourses = document.getElementById('backToCourses');
+
+          courseCards.forEach((card, index) => {
+            // Prevent double event if button is clicked
+            card.addEventListener('click', function (e) {
+              // Only trigger if not clicking the button itself
+              if (!e.target.closest('.btn')) {
+                // Simulate button click
+                courseButtons[index].click();
+              }
+            });
+            // Change cursor to pointer for the whole card
+            card.style.cursor = 'pointer';
+          });
+        });
+      </script>
       <!-- Schedule -->
       <div class="content-area" id="schedule">
         <div class="dashboard-header">
@@ -1096,62 +1145,101 @@
         </div>
       </div>
       
-     
+    <!-- Timetable Section (always visible below courses) -->
+    <div class="timetable-container mt-8 show" id="timetableDetails" style="transition:all 0.4s;">
+      <h2 class="text-xl font-semibold mb-4 flex items-center">
+        <i class="fas fa-table mr-2"></i> My Timetable
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white rounded shadow">
+          <thead>
+            <tr>
+              <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Day</th>
+              <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+              <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+              <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="py-2 px-4 border-b border-gray-100">Monday</td>
+              <td class="py-2 px-4 border-b border-gray-100">10:00 AM - 11:30 AM</td>
+              <td class="py-2 px-4 border-b border-gray-100">Introduction to Programming</td>
+              <td class="py-2 px-4 border-b border-gray-100">Online</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4 border-b border-gray-100">Tuesday</td>
+              <td class="py-2 px-4 border-b border-gray-100">11:00 AM - 12:30 PM</td>
+              <td class="py-2 px-4 border-b border-gray-100">Web Development Fundamentals</td>
+              <td class="py-2 px-4 border-b border-gray-100">Online</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4 border-b border-gray-100">Wednesday</td>
+              <td class="py-2 px-4 border-b border-gray-100">2:00 PM - 3:30 PM</td>
+              <td class="py-2 px-4 border-b border-gray-100">Data Science Essentials</td>
+              <td class="py-2 px-4 border-b border-gray-100">Online</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4 border-b border-gray-100">Thursday</td>
+              <td class="py-2 px-4 border-b border-gray-100">3:00 PM - 4:30 PM</td>
+              <td class="py-2 px-4 border-b border-gray-100">Web Development Fundamentals</td>
+              <td class="py-2 px-4 border-b border-gray-100">Online</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4 border-b border-gray-100">Friday</td>
+              <td class="py-2 px-4 border-b border-gray-100">1:00 PM - 2:30 PM</td>
+              <td class="py-2 px-4 border-b border-gray-100">Introduction to Programming</td>
+              <td class="py-2 px-4 border-b border-gray-100">Online</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
       
       <!-- Ads Section -->
       <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 p-2" id="adsSection">
         <div class="container mx-auto">
           <div class="relative h-20 overflow-hidden">
             <div class="ads-slider flex transition-transform duration-500">
-              <div class="ad-slide min-w-full p-2 flex items-center justify-between">
-                <div class="flex items-center">
-                  <img src="https://via.placeholder.com/80x60?text=Ad+1" alt="Advertisement" class="rounded mr-4">
-                  <div>
-                    <h4 class="font-medium">Special Discount on Premium Courses!</h4>
-                    <p class="text-sm text-gray-600">Get 30% off on all premium courses until June 30th.</p>
-                  </div>
-                </div>
-                <a href="https://edulearnit.netlify.app/" target="_blank" class="btn btn-primary">Learn More</a>
-              </div>
-              <div class="ad-slide min-w-full p-2 flex items-center justify-between">
-                <div class="flex items-center">
-                  <img src="https://via.placeholder.com/80x60?text=Ad+2" alt="Advertisement" class="rounded mr-4">
-                  <div>
-                    <h4 class="font-medium">New Data Science Masterclass</h4>
-                    <p class="text-sm text-gray-600">Join our advanced Data Science course starting next month.</p>
-                  </div>
-                </div>
-                <a href="https://edulearnit.netlify.app/" target="_blank"  class="btn btn-primary">Enroll Now</a>
-              </div>
-              <div class="ad-slide min-w-full p-2 flex items-center justify-between">
-                <div class="flex items-center">
-                  <img src="https://via.placeholder.com/80x60?text=Ad+3" alt="Advertisement" class="rounded mr-4">
-                  <div>
-                    <h4 class="font-medium">Join Our Tech Conference</h4>
-                    <p class="text-sm text-gray-600">Network with industry professionals and expand your knowledge.</p>
-                  </div>
-                </div>
-                <a href="https://altechit.netlify.app/" target="_blank"  class="btn btn-primary">Register</a>
-              </div>
-              <div class="ad-slide min-w-full p-2 flex items-center justify-between">
-                <div class="flex items-center">
-                  <img src="https://via.placeholder.com/80x60?text=Ad+2" alt="Advertisement" class="rounded mr-4">
-                  <div>
-                    <h4 class="font-medium">Professional Web Development</h4>
-                    <p class="text-sm text-gray-600">Reach out to our skilled software developers.</p>
-                  </div>
-                </div>
-                <a href="https://altechit.netlify.app/" target="_blank"  class="btn btn-primary">Reach out</a>
-              </div>
-            </div>
-            <button class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md" id="prevAd">
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md" id="nextAd">
-              <i class="fas fa-chevron-right"></i>
-            </button>
+      <div class="ad-slide min-w-full p-2 flex items-center justify-between">
+        <div class="flex items-center">
+          <img src="https://via.placeholder.com/80x60?text=Ad+1" alt="Advertisement" class="rounded mr-4">
+          <div>
+            <h4 class="font-medium">Special Discount on Premium Courses!</h4>
+            <p class="text-sm text-gray-600">Get 30% off on all premium courses until June 30th.</p>
           </div>
         </div>
+        <a href="https://edulearnit.netlify.app/" target="_blank"  class="btn btn-primary">Enroll Now</a>
+      </div>
+      <div class="ad-slide min-w-full p-2 flex items-center justify-between">
+        <div class="flex items-center">
+          <img src="https://via.placeholder.com/80x60?text=Ad+2" alt="Advertisement" class="rounded mr-4">
+          <div>
+            <h4 class="font-medium">New Data Science Masterclass</h4>
+            <p class="text-sm text-gray-600">Join our advanced Data Science course starting next month.</p>
+          </div>
+        </div>
+        <a href="https://edulearnit.netlify.app/" target="_blank"  class="btn btn-primary">Enroll Now</a>
+      </div>
+      <div class="ad-slide min-w-full p-2 flex items-center justify-between">
+        <div class="flex items-center">
+          <img src="https://via.placeholder.com/80x60?text=Ad+3" alt="Advertisement" class="rounded mr-4">
+          <div>
+            <h4 class="font-medium">Join Our Tech Conference</h4>
+            <p class="text-sm text-gray-600">Network with industry professionals and expand your knowledge.</p>
+          </div>
+        </div>
+        <a href="https://altechit.netlify.app/" target="_blank"  class="btn btn-primary">Register</a>
+      </div>
+      <div class="ad-slide min-w-full p-2 flex items-center justify-between">
+        <div class="flex items-center">
+          <img src="https://via.placeholder.com/80x60?text=Ad+2" alt="Advertisement" class="rounded mr-4">
+          <div>
+            <h4 class="font-medium">Professional Web Development</h4>
+            <p class="text-sm text-gray-600">Reach out to our skilled software developers.</p>
+          </div>
+        </div>
+        <a href="https://altechit.netlify.app/" target="_blank"  class="btn btn-primary">Reach out</a>
       </div>
     </div>
   </div>
@@ -1391,7 +1479,7 @@
       
       <!-- Add footer note -->
       <div class="mt-auto p-4 text-center text-xs text-gray-400 italic">
-        Powered by EduMagic Platform
+        Powered by ALTECH software developers.
       </div>
     </div>
     
@@ -1810,7 +1898,7 @@
             // Show success toast
             showToast('Login successful!', 'success');
           } else {
-            showToast('Invalid credentials. Use STUDENT/ALTECHSTUDENT', 'error');
+            showToast('Invalid credentials. Use the common logins (STUDENT/ALTECHSTUDENT)', 'error');
           }
           return;
         }
@@ -2307,7 +2395,7 @@
           teachersTab.classList.remove('border-primary-color', 'text-primary-color');
           
           // Update table with student data
-          userTable.innerHTML = `
+          userTable.innerHTML =  `
             <tr>
               <td class="py-4 px-4 border-b border-gray-200">John Doe</td>
               <td class="py-4 px-4 border-b border-gray-200">john.doe@example.com</td>
@@ -2683,185 +2771,130 @@
       }
     }
     
-    // Update course content based on which course was clicked
-    function updateCourseContent(courseIndex) {
-      const courseTitleHeader = document.getElementById('courseTitleHeader');
-      const courseDescriptionText = document.getElementById('courseDescriptionText');
-      const courseMaterials = document.getElementById('courseMaterials');
-      const courseAssignments = document.getElementById('courseAssignments');
-      const courseLiveLessons = document.getElementById('courseLiveLessons');
-      const courseVideoContainer = document.getElementById('courseVideoContainer');
-      const courseVideoPlayer = document.getElementById('courseVideoPlayer');
-      
-      // Course data - can be expanded or modified manually
-      const courses = [
-        {
-          title: "Introduction to Programming",
-          description: "Learn the basics of programming with Python, including variables, data types, and control structures.",
-          materials: [
-            { type: "pdf", name: "Introduction to Python.pdf" },
-            { type: "video", name: "Variables and Data Types.mp4" },
-            { type: "code", name: "Practice Examples.zip" }
-          ],
-          assignments: [
-            { name: "Assignment 1: Basic Syntax", status: "completed" },
-            { name: "Assignment 2: Functions", status: "in-progress" },
-            { name: "Assignment 3: Loops", status: "not-started" }
-          ],
-          liveLessons: [
-            { name: "Monday - Introduction to Variables (10:00 AM)" },
-            { name: "Wednesday - Control Structures (2:00 PM)" },
-            { name: "Friday - Functions & Methods (11:00 AM)" }
-          ]
-        },
-        {
-          title: "Web Development Fundamentals",
-          description: "Learn HTML, CSS, and JavaScript to build responsive and interactive websites.",
-          materials: [
-            { type: "pdf", name: "HTML Basics.pdf" },
-            { type: "pdf", name: "CSS Styling Guide.pdf" },
-            { type: "video", name: "JavaScript Fundamentals.mp4" }
-          ],
-          assignments: [
-            { name: "Assignment 1: HTML Structure", status: "completed" },
-            { name: "Assignment 2: CSS Layouts", status: "completed" },
-            { name: "Assignment 3: JavaScript Events", status: "in-progress" }
-          ],
-          liveLessons: [
-            { name: "Tuesday - HTML & Document Structure (9:00 AM)" },
-            { name: "Thursday - CSS Layouts & Flexbox (1:00 PM)" },
-            { name: "Saturday - JavaScript Basics (10:00 AM)" }
-          ]
-        },
-        {
-          title: "Data Science Essentials",
-          description: "Introduction to data analysis and visualization using Python libraries.",
-          materials: [
-            { type: "pdf", name: "Introduction to Data Science.pdf" },
-            { type: "video", name: "NumPy and Pandas Basics.mp4" },
-            { type: "code", name: "Data Visualization Examples.zip" }
-          ],
-          assignments: [
-            { name: "Assignment 1: Data Cleaning", status: "in-progress" },
-            { name: "Assignment 2: Data Analysis", status: "not-started" },
-            { name: "Assignment 3: Data Visualization", status: "not-started" }
-          ],
-          liveLessons: [
-            { name: "Monday - Introduction to NumPy (11:00 AM)" },
-            { name: "Wednesday - Pandas DataFrames (3:00 PM)" },
-            { name: "Friday - Data Visualization with Matplotlib (1:00 PM)" }
-          ]
-        }
-      ];
-      
-      // Select course based on index, with fallback to first course
-      const course = courses[courseIndex] || courses[0];
-      
-      // Update course title and description
-      if (courseTitleHeader) courseTitleHeader.textContent = course.title;
-      if (courseDescriptionText) courseDescriptionText.textContent = course.description;
-      
-      // Update materials list
-      if (courseMaterials) {
-        let materialsHTML = '';
-        course.materials.forEach(material => {
-          let icon = 'file';
-          let color = 'gray';
-          
-          if (material.type === 'pdf') {
-            icon = 'file-pdf';
-            color = 'red';
-          } else if (material.type === 'video') {
-            icon = 'video';
-            color = 'blue';
-          } else if (material.type === 'code') {
-            icon = 'file-code';
-            color = 'green';
-          }
-          
-          materialsHTML += `
-            <li class="flex items-center">
-              <i class="fas fa-${icon} text-${color}-500 mr-2"></i>
-              <a href="#" class="text-blue-600 hover:underline">${material.name}</a>
-            </li>
-          `;
-        });
-        
-        courseMaterials.innerHTML = materialsHTML;
-      }
-      
-      // Update assignments list
-      if (courseAssignments) {
-        let assignmentsHTML = '';
-        course.assignments.forEach(assignment => {
-          let statusClass = 'gray';
-          let statusText = 'Not Started';
-          
-          if (assignment.status === 'completed') {
-            statusClass = 'green';
-            statusText = 'Completed';
-          } else if (assignment.status === 'in-progress') {
-            statusClass = 'yellow';
-            statusText = 'In Progress';
-          }
-          
-          assignmentsHTML += `
-            <li class="flex justify-between items-center">
-              <div class="flex items-center">
-                <i class="fas fa-tasks text-purple-500 mr-2"></i>
-                <span>${assignment.name}</span>
-              </div>
-              <span class="text-sm bg-${statusClass}-100 text-${statusClass}-800 px-2 py-1 rounded">${statusText}</span>
-            </li>
-          `;
-        });
-        
-        courseAssignments.innerHTML = assignmentsHTML;
-      }
-      
-      // Update live lessons list
-      if (courseLiveLessons) {
-        let liveLessonsHTML = '';
-        course.liveLessons.forEach(lesson => {
-          liveLessonsHTML += `
-            <li class="flex items-center">
-              <i class="fas fa-video-camera text-purple-500 mr-2"></i>
-              <a href="#" class="text-blue-600 hover:underline">${lesson.name}</a>
-            </li>
-          `;
-        });
-        
-        courseLiveLessons.innerHTML = liveLessonsHTML;
-      }
-      
-      // Update video content if available
-      if (courseVideoContainer && courseVideoPlayer) {
-        // Demo video URLs - in a real app these would come from your course data
-        const courseVideos = [
-          "https://www.youtube.com/embed/rfscVS0vtbw", // Python tutorial
-          "https://www.youtube.com/embed/qz0aGYrrlhU", // HTML/CSS tutorial
-          "https://www.youtube.com/embed/r-uOLxNrNk8"  // Data Science tutorial
-        ];
-        
-        // Set the video source based on course index
-        const videoUrl = courseVideos[courseIndex] || courseVideos[0];
-        courseVideoPlayer.src = videoUrl;
-        
-        // Make sure the video container is visible
-        courseVideoContainer.style.display = 'block';
-        
-        // Clear any existing notes
-        const videoNotes = document.getElementById('videoNotes');
-        if (videoNotes) {
-          videoNotes.value = '';
-        }
-      }
+// Update course content based on which course was clicked
+function updateCourseContent(courseIndex) {
+  const courseTitleHeader = document.getElementById('courseTitleHeader');
+  const courseDescriptionText = document.getElementById('courseDescriptionText');
+  const courseMaterials = document.getElementById('courseMaterials');
+  const courseAssignments = document.getElementById('courseAssignments');
+  const courseLiveLessons = document.getElementById('courseLiveLessons');
+  const courseVideoContainer = document.getElementById('courseVideoContainer');
+  const courseVideoPlayer = document.getElementById('courseVideoPlayer');
+  // Course data - can be expanded or modified manually
+  const courses = [
+    {
+      title: "Introduction to Programming",
+      description: "Learn the basics of programming with Python, including variables, data types, and control structures.",
+      materials: [
+        { type: "pdf", name: "Introduction to Python.pdf" },
+        { type: "video", name: "Variables and Data Types.mp4" },
+        { type: "code", name: "Practice Examples.zip" }
+      ],
+      assignments: [
+        { name: "Assignment 1: Basic Syntax", status: "completed" },
+        { name: "Assignment 2: Functions", status: "in-progress" },
+        { name: "Assignment 3: Loops", status: "not-started" }
+      ],
+      liveLessons: [
+        { name: "Monday - Introduction to Variables (10:00 AM)" },
+        { name: "Wednesday - Control Structures (2:00 PM)" },
+        { name: "Friday - Functions and Scope (1:00 PM)" }
+      ]
+    },
+    {
+      title: "Web Development Fundamentals",
+      description: "Build responsive web interfaces using HTML, CSS, and JavaScript. Learn best practices for modern web development.",
+      materials: [
+        { type: "pdf", name: "HTML Basics.pdf" },
+        { type: "video", name: "CSS Flexbox Tutorial.mp4" },
+        { type: "code", name: "JavaScript Basics.zip" }
+      ],
+      assignments: [
+        { name: "Assignment 1: HTML Structure", status: "not-started" },
+        { name: "Assignment 2: CSS Styling", status: "not-started" },
+        { name: "Assignment 3: JavaScript Interactivity", status: "not-started" }
+      ],
+      liveLessons: [
+        { name: "Tuesday - HTML Structure (11:00 AM)" },
+        { name: "Thursday - CSS Flexbox (3:00 PM)" },
+        { name: "Saturday - JavaScript Basics (12:00 PM)" }
+      ]
+    },
+    {
+      title: "Data Science Essentials",
+      description: "Explore data visualization techniques using Python libraries like Matplotlib and Seaborn. Learn how to analyze and present data effectively.",
+      materials: [
+        { type: "pdf", name: "Data Visualization with Python.pdf" },
+        { type: "video", name: "Matplotlib Tutorial.mp4" },
+        { type: "code", name: "Data Analysis Examples.zip" }
+      ],
+      assignments: [
+        { name: "Assignment 1: Data Cleaning", status: "not-started" },
+        { name: "Assignment 2: Data Visualization", status: "not-started" },
+        { name: "Assignment 3: Statistical Analysis", status: "not-started" }
+      ],
+      liveLessons: [
+        { name: "Monday - Data Cleaning Techniques (10:00 AM)" },
+        { name: "Wednesday - Data Visualization with Matplotlib (2:00 PM)" },
+        { name: "Friday - Statistical Analysis Basics (1:00 PM)" }
+      ]
     }
+  ];
+
+  // Defensive: if index is out of range, default to first course
+  const course = courses[courseIndex] || courses[0];
+
+  // Update title and description
+  if (courseTitleHeader) courseTitleHeader.textContent = course.title;
+  if (courseDescriptionText) courseDescriptionText.textContent = course.description;
+
+  // Update materials
+  if (courseMaterials) {
+    courseMaterials.innerHTML = course.materials.map(mat => {
+      let icon = '';
+      if (mat.type === 'pdf') icon = '<i class="fas fa-file-pdf text-red-500 mr-2"></i>';
+      else if (mat.type === 'video') icon = '<i class="fas fa-video text-blue-500 mr-2"></i>';
+      else if (mat.type === 'code') icon = '<i class="fas fa-file-code text-green-500 mr-2"></i>';
+      return `<li class="flex items-center">${icon}<a href="#" class="text-blue-600 hover:underline">${mat.name}</a></li>`;
+    }).join('');
+  }
+
+  // Update assignments
+  if (courseAssignments) {
+    courseAssignments.innerHTML = course.assignments.map(assign => {
+      let badge = '';
+      if (assign.status === 'completed') badge = '<span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">Completed</span>';
+      else if (assign.status === 'in-progress') badge = '<span class="text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded">In Progress</span>';
+      else badge = '<span class="text-sm bg-gray-100 text-gray-800 px-2 py-1 rounded">Not Started</span>';
+      return `<li class="flex justify-between items-center"><div class="flex items-center"><i class="fas fa-tasks text-purple-500 mr-2"></i><span>${assign.name}</span></div>${badge}</li>`;
+    }).join('');
+  }
+
+  // Update live lessons
+  if (courseLiveLessons) {
+    courseLiveLessons.innerHTML = course.liveLessons.map(lesson =>
+      `<li class="flex items-center"><i class="fas fa-video-camera text-purple-500 mr-2"></i><a href="#" class="text-blue-600 hover:underline">${lesson.name}</a></li>`
+    ).join('');
+  }
+
+  // Optionally update video player (static demo, so leave blank or set a sample video)
+  if (courseVideoPlayer) {
+    if (courseIndex === 0) {
+      courseVideoPlayer.src = "https://www.youtube.com/embed/rfscVS0vtbw";
+    } else if (courseIndex === 1) {
+      courseVideoPlayer.src = "https://www.youtube.com/embed/UB1O30fR-EE";
+    } else if (courseIndex === 2) {
+      courseVideoPlayer.src = "https://www.youtube.com/embed/3Xc3CA655Y4";
+    } else {
+      courseVideoPlayer.src = "";
+    }
+  }
+}
     
-    // Initialize timetable view
-    function initializeTimetableView() {
-      const studentCalendarEl = document.getElementById('studentCalendar');
-      const timetableDetails = document.getElementById('timetableDetails');
+        // Initialize timetable view
+        function initializeTimetableView() {
+          const studentCalendarEl = document.getElementById('studentCalendar');
+          const timetableDetails = document.getElementById('timetableDetails');
       
       if (studentCalendarEl && timetableDetails) {
         // Add a button to view timetable (only one button, not duplicated)
